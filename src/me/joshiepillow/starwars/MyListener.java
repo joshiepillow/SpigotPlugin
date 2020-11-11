@@ -21,7 +21,7 @@ public class MyListener implements org.bukkit.event.Listener
         Player player = (Player) event.getWhoClicked();
         Inventory inventory = event.getInventory();
         if (inventory.equals(Inventories.myInventory))
-            player.sendMessage("HIHIHIHO");
+            Inventories.onInventoryClick(event);
     }
 
 }

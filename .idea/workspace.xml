@@ -7,7 +7,12 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea704ae3-6746-42a4-a2fc-cfcb5b3ae943" name="Default Changelist" comment="" />
+    <list default="true" id="ea704ae3-6746-42a4-a2fc-cfcb5b3ae943" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/SpigotPlugin_jar/SpigotPlugin.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/SpigotPlugin_jar/SpigotPlugin.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/joshiepillow/starwars/Inventories.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/joshiepillow/starwars/Inventories.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/joshiepillow/starwars/MyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/joshiepillow/starwars/MyListener.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +83,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

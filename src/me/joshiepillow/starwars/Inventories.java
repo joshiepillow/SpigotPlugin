@@ -7,9 +7,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Inventories {
-    public static Inventory myInventory = Bukkit.createInventory(null, 54, "My custom Inventory!");
+    public static Inventory myInventory = Bukkit.createInventory(null, 36, "My custom Inventory!");
     // The first parameter, is the inventory owner. I make it null to let everyone use it.
     //The second parameter, is the slots in a inventory. Must be a multiple of 9. Can be up to 54.
     //The third parameter, is the inventory name. This will accept chat colors
@@ -18,13 +22,13 @@ public class Inventories {
         myInventory.setItem(8, new ItemStack(Material.GOLD_BLOCK, 1));
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
+    public static void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked(); // The player that clicked the item
         ItemStack clicked = event.getCurrentItem(); // The item that was clicked
         Inventory inventory = event.getInventory(); // The inventory that was clicked in
         if (inventory.equals(myInventory)) { // The inventory is our custom Inventory
-            if (clicked.getType() == Material.DIRT) { // The item that the player clicked it dirt
+            if (clicked == null) {}
+            else if (clicked.getType() == Material.DIRT) { // The item that the player clicked it dirt
                 event.setCancelled(true); // Make it so the dirt is back in its original spot
                 player.closeInventory(); // Closes there inventory
                 player.getInventory().addItem(new ItemStack(Material.DIRT, 1)); // Adds dirt
@@ -33,5 +37,17 @@ public class Inventories {
         } else {
             player.sendMessage("NOT RIGHT");
         }
+    }
+
+    public static void createDisplay(Material material, Inventory inv, int Slot, String name, String lore) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(name);
+        ArrayList<String> Lore = new ArrayList<String>();
+        Lore.add(lore);
+        meta.setLore(Lore);
+        item.setItemMeta(meta);
+
+        inv.setItem(Slot, item);
     }
 }
