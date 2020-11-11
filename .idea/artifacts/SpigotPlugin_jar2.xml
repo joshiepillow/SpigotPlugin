@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SpigotPlugin:jar2">
+    <output-path>$USER_HOME$/Projects/Server/plugins/update</output-path>
+    <root id="archive" name="SpigotPlugin.jar">
+      <element id="module-output" name="SpigotPlugin" />
+      <element id="extracted-dir" path="$USER_HOME$/SpigotAPI/Spigot/Spigot-API/target/spigot-api-1.16.3-R0.1-SNAPSHOT-shaded.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
