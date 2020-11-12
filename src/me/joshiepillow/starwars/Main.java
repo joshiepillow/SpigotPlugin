@@ -1,20 +1,16 @@
 package me.joshiepillow.starwars;
 
+import me.joshiepillow.starwars.classes.BountyHunter;
 import me.joshiepillow.starwars.classes.Product;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Main plugin class
@@ -25,7 +21,7 @@ public class Main extends JavaPlugin {
     /**
      * Server object
      */
-    Server server = getServer();
+    private Server server = getServer();
 
     /**
      * Connects listener and gets saved data
@@ -33,9 +29,13 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new MyListener(), this);
-        BountyHunter.SetAll(Data.loadData("plugins/Starwars/hunters.ser").hunters);
+        Data d = Data.loadData("plugins/Starwars/data.ser");
+        if (d != null) {
+            BountyHunter.SetAll(d.hunters);
+            Product.SetAll(d.products);
+        }
         Bukkit.getLogger().info("Successfully loaded Starwars version" + this.getDescription().getVersion());
-
+        Inventories.init(this);
     }
 
     /**
@@ -43,8 +43,8 @@ public class Main extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        Data d = new Data(BountyHunter.getAll());
-        d.saveData("plugins/Starwars/hunters.ser");
+        Data d = new Data(BountyHunter.getAll(), Product.getAll());
+        d.saveData("plugins/Starwars/data.ser");
     }
 
     /**
@@ -164,7 +164,7 @@ public class Main extends JavaPlugin {
                     sender.sendMessage("BountyHunter does not exist.");
                     return true;
                 }
-                if (h.setBountyName(args[1])) sender.sendMessage("Success");
+                if (h.setName(args[1])) sender.sendMessage("Success");
                 else sender.sendMessage("That name is taken.");
                 return true;
             }
@@ -201,19 +201,39 @@ public class Main extends JavaPlugin {
                 }
                 return false;
             }
-            /*case "hunter.start": {
-                if (!(sender instanceof Player)) return false;
-                sender.sendMessage("What is your name?");
-            }*/
+            case "hunter.buy": {
+                if (args.length == 2) {
+                    h = BountyHunter.getByUsername(args[0]);
+                    p = Product.getByName(args[1]);
+                    if (h!=null && p!=null) {
+                        String s = h.buy(p);
+                        if (s!=null) {
+                            sender.sendMessage("Success!");
+                            Bukkit.dispatchCommand(server.getConsoleSender(), s);
+                        } else {
+                            sender.sendMessage("You do not have the money to do that.");
+                        }
+                    } else {
+                        sender.sendMessage("BountyHunter or Product does not exist.");
+                    }
+                    return true;
+                }
+                return false;
+            }
             case "product.create": {
-                if (args.length != 3) return false;
-                p = Product.create(args[0], Integer.parseInt(args[1]), args[2]);
+                if (args.length < 3) return false;
+                StringBuilder s = new StringBuilder();
+                for(int i = 2; i < args.length; i++) {
+                    s.append(args[i]);
+                    s.append(" ");
+                }
+                p = Product.create(args[0], Integer.parseInt(args[1]), s.toString());
                 if (p == null) sender.sendMessage("That name is already taken.");
                 else sender.sendMessage("Success!\n" + p.toString());
                 return true;
             }
             case "product.cmd": {
-                if (args.length > 2 || args.length == 0) return false;
+                if (args.length == 0) return false;
                 if (args.length == 1) {
                     p = Product.getByName(args[0]);
                     if (p == null) {
@@ -222,13 +242,18 @@ public class Main extends JavaPlugin {
                     }
                     sender.sendMessage(p.getCommand());
                 }
-                if (args.length == 2) {
+                else {
                     p = Product.getByName(args[0]);
                     if (p == null) {
                         sender.sendMessage("Product does not exist.");
                         return true;
                     }
-                    p.setCommand(args[1]);
+                    StringBuilder s = new StringBuilder();
+                    for(int i = 1; i < args.length; i++) {
+                        s.append(args[i]);
+                        s.append(" ");
+                    }
+                    p.setCommand(s.toString());
                     sender.sendMessage("Success!\nNew command: " + p.getCommand());
                 }
                 return true;
@@ -274,6 +299,16 @@ public class Main extends JavaPlugin {
                     p.setCost(Integer.parseInt(args[1]));
                     sender.sendMessage("Success!\nNew cost: " + p.getCost());
                 }
+                return true;
+            }
+            case "product.list": {
+                StringBuilder s = new StringBuilder();
+                for (int i = 0; i < Product.getAll().size(); i++) {
+                    p = Product.getAll().get(i);
+                    s.append(p.toString());
+                    s.append("\n");
+                }
+                sender.sendMessage(s.toString());
                 return true;
             }
             case "test": {

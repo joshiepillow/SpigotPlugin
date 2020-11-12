@@ -1,6 +1,6 @@
 main: me.joshiepillow.starwars.Main
 name: starwars
-version: 0.2.2
+version: 0.6.0
 author: me
 description: An Example plugin
 api-version: 1.16
@@ -31,6 +31,9 @@ commands:
   hunter.list:
     description: List all hunters
     usage: /<command>
+  hunter.buy:
+    description: Buy a product
+    usage: /<command> Username Product
 
   product.create:
     description: Create new product

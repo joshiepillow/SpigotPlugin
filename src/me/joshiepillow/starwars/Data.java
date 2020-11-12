@@ -1,6 +1,8 @@
 package me.joshiepillow.starwars;
 
-import org.bukkit.Location;
+import com.google.gson.internal.$Gson$Preconditions;
+import me.joshiepillow.starwars.classes.BountyHunter;
+import me.joshiepillow.starwars.classes.Product;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -8,10 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -45,14 +45,24 @@ public class Data implements Serializable {
     }
 
     public final List<BountyHunter> hunters;
+    public final List<Product> products;
 
     // Can be used for saving
-    public Data(List<BountyHunter> hunters) {
+    public Data(List<BountyHunter> hunters, List<Product> products) {
         this.hunters = hunters;
+        this.products = products;
+
     }
     // Can be used for loading
     public Data(Data loadedData) {
-        this.hunters = loadedData.hunters;
+        if (loadedData.hunters != null)
+            this.hunters = loadedData.hunters;
+        else
+            this.hunters = new ArrayList<>();
+        if (loadedData.products != null)
+            this.products = loadedData.products;
+        else
+            this.products = new ArrayList<>();
     }
 
 }

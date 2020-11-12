@@ -1,12 +1,18 @@
 package me.joshiepillow.starwars;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class MyListener implements org.bukkit.event.Listener
 {
@@ -20,8 +26,14 @@ public class MyListener implements org.bukkit.event.Listener
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         Inventory inventory = event.getInventory();
-        if (inventory.equals(Inventories.myInventory))
+        if (inventory.equals(Inventories.myInventory)) {
             Inventories.onInventoryClick(event);
+        }
     }
+    /*@EventHandler
+    public void onSprint(PlayerToggleSprintEvent e) {
+        Player p = e.getPlayer();
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10, 10));
+    }*/
 
 }

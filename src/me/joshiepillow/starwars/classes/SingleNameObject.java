@@ -1,12 +1,14 @@
 package me.joshiepillow.starwars.classes;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class SingleNameObject<T> {
+class SingleNameObject implements Serializable {
 
     private String name;
     private static Map<Type, List<SingleNameObject>> objects = new HashMap<>();
@@ -30,7 +32,7 @@ class SingleNameObject<T> {
         return name;
     }
 
-    boolean setName(String name, Class<?> c) {
+    boolean setName(String name, Class<? extends SingleNameObject> c) {
         if (isTaken(name, c)) return false;
         name_list.get(c).remove(this.name);
         this.name = name;
@@ -43,15 +45,15 @@ class SingleNameObject<T> {
     }
 
     static List<SingleNameObject> getAll(Class c) {
+        objects.computeIfAbsent(c, k -> new ArrayList<>());
         return objects.get(c);
     }
 
-    static boolean setAll(List<SingleNameObject> data, Class<?> c) {
+    static void setAll(List<? extends SingleNameObject> data, Class<?> c) {
         for (SingleNameObject datum : data) {
             add(datum.getName(), c);
             add(datum, c);
         }
-        return true;
     }
 
     private static void add(SingleNameObject datum, Class<?> c) {
