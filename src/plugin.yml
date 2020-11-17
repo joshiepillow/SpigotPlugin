@@ -22,6 +22,7 @@ commands:
   hunter.create:
     description: Create new hunter
     usage: /<command> Nickname [username]
+    permission: bounty.use.create
   hunter.name:
     description: Get/Set name
     usage: /<command> Username [Nickname]
@@ -54,3 +55,12 @@ commands:
   test:
     description: test
     usage: /<command>
+permissions:
+   bounty.*:
+        description: parent command node
+        children:
+            bounty.use: true
+   bounty.use:
+        description: allows users to use commands
+        children:
+            bounty.use.create: true            
