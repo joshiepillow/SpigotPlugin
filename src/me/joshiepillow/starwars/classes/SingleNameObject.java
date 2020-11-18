@@ -64,7 +64,16 @@ class SingleNameObject implements Serializable {
         name_list.computeIfAbsent(c, k -> new ArrayList<>());
         name_list.get(c).add(name);
     }
+
+    void erase(Class<?> c) {
+        objects.computeIfAbsent(c, k -> new ArrayList<>());
+        name_list.computeIfAbsent(c, k -> new ArrayList<>());
+        objects.get(c).remove(this);
+        name_list.get(c).remove(this.getName());
+    }
+
     static SingleNameObject getByName(String name, Class<?> c) {
+        objects.computeIfAbsent(c, k -> new ArrayList<>());
         for (SingleNameObject datum : objects.get(c)) {
             if (datum.name.equals(name)) return datum;
         }

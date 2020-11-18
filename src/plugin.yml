@@ -1,6 +1,6 @@
 main: me.joshiepillow.starwars.Main
 name: starwars
-version: 0.6.0
+version: 0.6.8
 author: me
 description: An Example plugin
 api-version: 1.16
@@ -22,35 +22,94 @@ commands:
   hunter.create:
     description: Create new hunter
     usage: /<command> Nickname [username]
+    permission: nope
   hunter.name:
     description: Get/Set name
     usage: /<command> Username [Nickname]
+    permission: nope
   hunter.bal:
     description: Get/Change balance
     usage: /<command> Username [change]
+    permission: nope
   hunter.list:
     description: List all hunters
     usage: /<command>
+    permission: nope
   hunter.buy:
     description: Buy a product
     usage: /<command> Username Product
+    permission: nope
+  hunter.quest:
+    description: Create new quest
+    usage: /<command> Username displayName cost command
+  hunter.submit:
+    description: Submit a bounty
+    usage: /<command> Username
+    permission: nope
+  hunter.quests:
+    description: Show all quests
+    usage: /<command> Username
+    permission: nope
+  hunter.erase:
+    description: Erase a hunter
+    usage: /<command> Username
+    permission: nope
 
-  product.create:
-    description: Create new product
-    usage: /<command> name cost command
-  product.cmd:
-    description: Get/Set command
-    usage: /<command> name [newCmd]
-  product.name:
-    description: Get/Set name
-    usage: /<command> name [newName]
-  product.cost:
-    description: Get/Set cost
-    usage: /<command> name [newName]
-  product.list:
-    description: List all products
-    usage: /<command>
+#  product.create:
+#    description: Create new product
+#    usage: /<command> name cost command
+#    permission: nope
+#  product.cmd:
+#    description: Get/Set command
+#    usage: /<command> name [newCmd]
+#    permission: nope
+#  product.name:
+#    description: Get/Set name
+#    usage: /<command> name [newName]
+#    permission: nope
+#  product.cost:
+#    description: Get/Set cost
+#    usage: /<command> name [newName]
+#    permission: nope
+#  product.list:
+#    description: List all products
+#    usage: /<command>
+#    permission: nope
+#  product.erase:
+#    description: Erase a product
+#    usage: /<command> name
+#    permission: nope
+
+  shop.open:
+    description: Opens a shop page
+    usage: /<command> Username page
+    permission: nope
+  shop.close:
+    description: Closes a shop
+    usage: /<command> Username
+    permission: nope
+  shop.buy:
+    description: Safe buy
+    usage: /<command> Username Product
+    permission: nope
 
   test:
     description: test
+    usage: /<command>
+    permission: nope
+
+  start:
+    description: Get started.
+    usage: /<command>
+  name:
+    description: Create a name.
+    usage: /<command> name
+  me:
+    description: Get info about yourself.
+    usage: /<command>
+  list:
+    description: List online players
+    usage: /<command>
+  shop:
+    description: Opens the shop.
     usage: /<command>

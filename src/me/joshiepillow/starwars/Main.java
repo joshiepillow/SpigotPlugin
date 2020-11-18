@@ -1,16 +1,25 @@
 package me.joshiepillow.starwars;
 
 import me.joshiepillow.starwars.classes.BountyHunter;
+import me.joshiepillow.starwars.classes.Inventories;
 import me.joshiepillow.starwars.classes.Product;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Main plugin class
@@ -28,7 +37,7 @@ public class Main extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new MyListener(), this);
+        getServer().getPluginManager().registerEvents(new MyListener(this), this);
         Data d = Data.loadData("plugins/Starwars/data.ser");
         if (d != null) {
             BountyHunter.SetAll(d.hunters);
@@ -172,8 +181,7 @@ public class Main extends JavaPlugin {
                 StringBuilder s = new StringBuilder();
                 for (int i = 0; i < BountyHunter.getAll().size(); i++) {
                     h = BountyHunter.getAll().get(i);
-                    s.append(h.toString());
-                    s.append("\n");
+                    s.append("(").append(h.getUsername()).append(")").append(h.toString()).append("\n");
                 }
                 sender.sendMessage(s.toString());
                 return true;
@@ -185,7 +193,7 @@ public class Main extends JavaPlugin {
                         sender.sendMessage("BountyHunter does not exist.");
                         return true;
                     }
-                    sender.sendMessage("&7Current Balance --&r " + h.getBal() + "&6C&r");
+                    sender.sendMessage("§7Current Balance --§r " + h.getBal() + "§6C§r");
                     return true;
                 }
                 if (args.length == 2) {
@@ -206,10 +214,12 @@ public class Main extends JavaPlugin {
                     h = BountyHunter.getByUsername(args[0]);
                     p = Product.getByName(args[1]);
                     if (h!=null && p!=null) {
-                        String s = h.buy(p);
+                        List<String> s = h.buy(p);
                         if (s!=null) {
                             sender.sendMessage("Success!");
-                            Bukkit.dispatchCommand(server.getConsoleSender(), s);
+                            for (String datum : s)
+                                if (!datum.isEmpty())
+                                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), datum);
                         } else {
                             sender.sendMessage("You do not have the money to do that.");
                         }
@@ -220,7 +230,52 @@ public class Main extends JavaPlugin {
                 }
                 return false;
             }
-            case "product.create": {
+            case "hunter.quest": {
+                if (args.length <  4) return false;
+                h = BountyHunter.getByUsername(args[0]);
+                if (h != null) {
+                    StringBuilder s = new StringBuilder();
+                    for(int i = 3; i < args.length; i++) {
+                        s.append(args[i]);
+                        s.append(" ");
+                    }
+                    h.addQuest("mob", args[1], Integer.parseInt(args[2]), s.toString());
+                    sender.sendMessage("Success!");
+                } else sender.sendMessage("BountyHunter does not exist.");
+                return true;
+            }
+            case "hunter.submit": {
+                if (args.length != 1) return false;
+                h = BountyHunter.getByUsername(args[0]);
+                Player player = Bukkit.getPlayer(args[0]);
+                if (h!=null && player!=null) {
+                    List<String> s = h.submit(player.getInventory());
+                    for (String datum : s) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), datum);
+                    }
+                    sender.sendMessage("Success!");
+                } else sender.sendMessage("Player or BountyHunter does not exist.");
+                return true;
+            }
+            case "hunter.quests": {
+                if (args.length != 1) return false;
+                h = BountyHunter.getByUsername(args[0]);
+                if (h!=null) sender.sendMessage(h.quests());
+                else sender.sendMessage("BountyHunter does not exist.");
+                return true;
+            }
+            case "hunter.erase": {
+                if (args.length != 1) return false;
+                h = BountyHunter.getByUsername(args[0]);
+                if (h == null) sender.sendMessage("Product does not exist.");
+                else {
+                    h.erase();
+                    sender.sendMessage("Success!");
+                }
+                return true;
+            }
+
+            /*case "product.create": {
                 if (args.length < 3) return false;
                 StringBuilder s = new StringBuilder();
                 for(int i = 2; i < args.length; i++) {
@@ -311,10 +366,142 @@ public class Main extends JavaPlugin {
                 sender.sendMessage(s.toString());
                 return true;
             }
+            case "product.erase": {
+                if (args.length != 1) return false;
+                p = Product.getByName(args[0]);
+                if (p == null) sender.sendMessage("Product does not exist.");
+                else {
+                    p.erase();
+                    sender.sendMessage("Success!");
+                }
+                return true;
+            }*/
+
             case "test": {
-                ((Player) sender).openInventory(Inventories.myInventory);
+                Player player = (Player) sender;
+                ItemMeta m = (player).getInventory().getItemInMainHand().getItemMeta();
+                if (m != null && m.getDisplayName().equals("Pig Head"))
+                    player.openInventory(Inventories.main.getInventory());
+                else {
+                    if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                        player.getInventory().setItemInMainHand(new ItemStack(Material.CARROT_ON_A_STICK));
+                    } else if (player.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
+                        player.getInventory().setItemInOffHand(new ItemStack(Material.CARROT_ON_A_STICK));
+                    } else {
+                        sender.sendMessage("Must have open slot!");
+                        return true;
+                    }
+                    Pig pig = player.getWorld().spawn(player.getLocation(), Pig.class);
+                    pig.addPotionEffects(new ArrayList<PotionEffect>() {{
+                        add(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE,
+                            1, false, false));
+                        add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE,
+                            255, false, false));
+                        add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE,
+                            15, false, false));
+                    }});
+                    pig.addPassenger(player);
+
+                }
                 return true;
             }
+            case "shop.open": {
+                if (args.length != 2) return false;
+                else {
+                    Player player = server.getPlayer(args[0]);
+                    Inventories inv = Inventories.getByName(args[1]);
+                    if (player==null) sender.sendMessage("That player does not exist or is offline.");
+                    else if (inv==null) sender.sendMessage("That page does not exist.");
+                    else {
+                        player.openInventory(inv.getInventory());
+                        sender.sendMessage("Success!");
+                    }
+                    return true;
+                }
+            }
+            case "shop.close": {
+                if (args.length != 1) return false;
+                else {
+                    Player player = server.getPlayer(args[0]);
+                    if (player==null) sender.sendMessage("That player does not exist or is offline.");
+                    else {
+                        player.closeInventory();
+                        sender.sendMessage("Success!");
+                    }
+                    return true;
+                }
+            }
+            case "shop.buy": {
+                if (args.length != 2) return false;
+                else {
+                    h = BountyHunter.getByUsername(args[0]);
+                    p = Product.getByName(args[1]);
+                    if (h != null && p != null) {
+                        List<String> s = h.buy(p);
+
+                        if (s != null) {
+                            for (String datum : s) {
+                                Bukkit.dispatchCommand(server.getConsoleSender(), datum);
+                            }
+                            Bukkit.dispatchCommand(server.getConsoleSender(), "shop.close " + args[0]);
+                            sender.sendMessage("Success!");
+                        } else sender.sendMessage("You do not have the money to do that.");
+
+                    } else sender.sendMessage("BountyHunter or Product does not exist.");
+                }
+                return true;
+            }
+
+            case "start":
+                sender.sendMessage("§8Hey, " + sender.getName() + ". Welcome to §r§e§lGalaxiesHorizon!\n" +
+                        "§r§8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
+                        " \n" +
+                        "§r§eTo get started type /name <your nickname>\n" +
+                        "List of commands:\n" +
+                        "     /name <your nickname> -- name yourself\n" +
+                        "     /shop -- open shop\n" +
+                        "     /me -- lists your info\n" +
+                        "     /start -- show this message again.");
+                return true;
+            case "name":
+                if (sender instanceof Player) {
+                    if (args.length < 1) sender.sendMessage("Please choose a name.");
+                    else if (args.length > 1) sender.sendMessage("Name must be one word.");
+                    else {
+                        if (BountyHunter.getByUsername(args[0]) != null)
+                            sender.sendMessage("You already chose your name!");
+                        else if (BountyHunter.create(sender.getName(), args[0]) == null)
+                            sender.sendMessage("That name is already taken!");
+                        else sender.sendMessage("Success!");
+                        return true;
+                    }
+                    return false;
+                } else sender.sendMessage("This command can only be run by a player.");
+                return true;
+            case "shop":
+                if (sender instanceof Player) {
+                    if (BountyHunter.getByUsername(sender.getName())==null)
+                        sender.sendMessage("You need to choose a name first!");
+                    else ((Player) sender).openInventory(Inventories.main.getInventory());
+                } else sender.sendMessage("This command can only be run by a player.");
+                return true;
+            case "me":
+                if (sender instanceof Player) {
+                    h = BountyHunter.getByUsername(sender.getName());
+                    if (h==null) sender.sendMessage("You need to choose a name first!");
+                    else sender.sendMessage(h.toString());
+                } else sender.sendMessage("This command can only be run by a player.");
+                return true;
+            case "list":
+                StringBuilder s = new StringBuilder();
+                for (int i = 0; i < BountyHunter.getAll().size(); i++) {
+                    h = BountyHunter.getAll().get(i);
+                    s.append(h.toString());
+                    s.append("\n");
+                }
+                sender.sendMessage(s.toString());
+                return true;
+
             default:
                 sender.sendMessage("This shouldn't be possible...Must be a bug.");
         }
@@ -326,7 +513,7 @@ public class Main extends JavaPlugin {
      * @param x1 X-coord of first point
      * @param y1 Z-coord of first point
      * @param x2 X-coord of second point
-     * @param y2 Z-coord of second påoint
+     * @param y2 Z-coord of second point
      * @return number of players
      */
     private int players_in(Double x1, Double y1, Double x2, Double y2) {

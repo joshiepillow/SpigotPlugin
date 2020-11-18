@@ -1,6 +1,7 @@
 package me.joshiepillow.starwars.classes;
 
-import java.io.Serializable;
+import org.bukkit.inventory.Inventory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ public class BountyHunter extends SingleNameObject {
      * Player username
      */
     private String username;
+
+    private List<Quest> quests = new ArrayList<>();
 
     /**
      * Money
@@ -67,13 +70,17 @@ public class BountyHunter extends SingleNameObject {
         return true;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     /**
      * Simple toString method
      * @return string
      */
     @Override
     public String toString() {
-        return "(" + username + ") " + getName() + " -- " + credits + "C";
+        return getName() + " -- " + credits + "C";
     }
 
     /**
@@ -113,8 +120,49 @@ public class BountyHunter extends SingleNameObject {
      * @param p valid product
      * @return if affordable, command, if unaffordable, null
      */
-    public String buy(Product p) {
-        if (changeBal(-p.getCost())) return p.getCommand(username);
+    public List<String> buy(Product p) {
+        if (changeBal(-p.getCost())) {
+            List<String> out = new ArrayList<>();
+            String s = p.getCommand(username);
+            for (String dat : s.split("/")) {
+                if (!dat.isEmpty()) {
+                    out.add(dat);
+                }
+            }
+            return out;
+
+        }
         return null;
+    }
+
+    public void erase() {
+        erase(BountyHunter.class);
+    }
+
+    public void addQuest(String type, String item_name, int count, String complete_command) {
+        Quest q = Quest.create(type, item_name, count, complete_command);
+        quests.add(q);
+    }
+    public List<String> submit(Inventory i) {
+        List<String> out = new ArrayList<>();
+        List<Quest> quest_copy = new ArrayList<>(quests);
+        for (Quest datum : quest_copy) {
+            String s = datum.submit(i);
+            if (s!=null) {
+                quests.remove(datum);
+                for (String dat : s.replace("%name", username).split("/")) {
+                    if (!dat.isEmpty()) {
+                        out.add(dat);
+                    }
+                }
+            }
+        }
+        return out;
+    }
+    public String quests() {
+        StringBuilder s = new StringBuilder();
+        for (Quest q : quests)
+            s.append(" -- ").append(q.toString()).append("\n");
+        return s.toString();
     }
 }

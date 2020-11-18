@@ -120,4 +120,8 @@ public class Product extends SingleNameObject {
     public String toString() {
         return this.getName()+"--"+this.getCost()+"C " + this.getCommand();
     }
+
+    public void erase() {
+        erase(Product.class);
+    }
 }
