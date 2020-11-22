@@ -23,10 +23,12 @@ public class Data implements Serializable {
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
             out.writeObject(this);
             out.close();
+            System.out.println("-- GALAXIES HORIZON PLUGIN DATA SAVED SUCCESSFULLY --");
             return true;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            System.out.println("-- GALAXIES HORIZON SAVE FAILED --");
             return false;
         }
     }

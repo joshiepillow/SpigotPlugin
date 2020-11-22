@@ -1,6 +1,10 @@
 package me.joshiepillow.starwars.classes;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,10 +163,39 @@ public class BountyHunter extends SingleNameObject {
         }
         return out;
     }
+    public List<String> submit(Inventory i, int num) {
+        List<String> out = new ArrayList<>();
+        Quest q = quests.get(num);
+        String s = q.submit(i);
+        if (s!=null) {
+            quests.remove(num);
+            for (String dat : s.replace("%name", username).split("/")) {
+                if (!dat.isEmpty()) {
+                    out.add(dat);
+                }
+            }
+        }
+        return out;
+    }
     public String quests() {
         StringBuilder s = new StringBuilder();
         for (Quest q : quests)
             s.append(" -- ").append(q.toString()).append("\n");
         return s.toString();
+    }
+    public Inventory QuestGui() {
+        Inventory inv = Bukkit.createInventory(null, 54, "Quests");
+        for (int i = 0; i < quests.size(); i++) {
+            Quest q = quests.get(i);
+            ItemStack item = Inventories.create("hunter.submit " + username + " " + i,
+                    Material.PLAYER_HEAD, q.getItem_name(), ""+q.getCount());
+            SkullMeta m = (SkullMeta) item.getItemMeta();
+            m.setOwningPlayer(Bukkit.getOfflinePlayer(
+                    "MHF_" + q.getItem_name().replace("_", "")));
+            item.setItemMeta(m);
+            inv.setItem(i, item);
+        }
+        Inventories.fillAll(inv);
+        return inv;
     }
 }

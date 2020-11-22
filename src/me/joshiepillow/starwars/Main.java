@@ -3,6 +3,7 @@ package me.joshiepillow.starwars;
 import me.joshiepillow.starwars.classes.BountyHunter;
 import me.joshiepillow.starwars.classes.Inventories;
 import me.joshiepillow.starwars.classes.Product;
+import me.joshiepillow.starwars.classes.Shop;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -245,22 +246,41 @@ public class Main extends JavaPlugin {
                 return true;
             }
             case "hunter.submit": {
-                if (args.length != 1) return false;
-                h = BountyHunter.getByUsername(args[0]);
-                Player player = Bukkit.getPlayer(args[0]);
-                if (h!=null && player!=null) {
-                    List<String> s = h.submit(player.getInventory());
-                    for (String datum : s) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), datum);
-                    }
-                    sender.sendMessage("Success!");
-                } else sender.sendMessage("Player or BountyHunter does not exist.");
-                return true;
+                if (args.length == 1) {
+                    h = BountyHunter.getByUsername(args[0]);
+                    Player player = Bukkit.getPlayer(args[0]);
+                    if (h != null && player != null) {
+                        List<String> s = h.submit(player.getInventory());
+                        for (String datum : s) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), datum);
+                        }
+                        sender.sendMessage("Success!");
+                    } else sender.sendMessage("Player or BountyHunter does not exist.");
+                    return true;
+                } else if (args.length == 2) {
+                    h = BountyHunter.getByUsername(args[0]);
+                    Player player = Bukkit.getPlayer(args[0]);
+                    if (h != null && player != null) {
+                        List<String> s = h.submit(player.getInventory(), Integer.parseInt(args[1]));
+                        for (String datum : s) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), datum);
+                        }
+                    } else sender.sendMessage("Player or BountyHunter does not exist.");
+                    return true;
+                }
             }
             case "hunter.quests": {
                 if (args.length != 1) return false;
                 h = BountyHunter.getByUsername(args[0]);
-                if (h!=null) sender.sendMessage(h.quests());
+                if (h!=null) {
+                    System.out.println("Checkpoint A");
+                    if (sender instanceof Player) {
+                        System.out.println("Checkpoint B");
+                        ((Player) sender).openInventory(h.QuestGui());
+                    } else {
+                        sender.sendMessage(h.quests());
+                    }
+                }
                 else sender.sendMessage("BountyHunter does not exist.");
                 return true;
             }
@@ -381,7 +401,7 @@ public class Main extends JavaPlugin {
                 Player player = (Player) sender;
                 ItemMeta m = (player).getInventory().getItemInMainHand().getItemMeta();
                 if (m != null && m.getDisplayName().equals("Pig Head"))
-                    player.openInventory(Inventories.main.getInventory());
+                    player.openInventory(Shop.main.getInventory());
                 else {
                     if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.getInventory().setItemInMainHand(new ItemStack(Material.CARROT_ON_A_STICK));
@@ -482,7 +502,7 @@ public class Main extends JavaPlugin {
                 if (sender instanceof Player) {
                     if (BountyHunter.getByUsername(sender.getName())==null)
                         sender.sendMessage("You need to choose a name first!");
-                    else ((Player) sender).openInventory(Inventories.main.getInventory());
+                    else ((Player) sender).openInventory(Shop.main.getInventory());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
             case "me":

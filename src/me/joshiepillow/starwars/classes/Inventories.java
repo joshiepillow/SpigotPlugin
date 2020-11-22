@@ -19,46 +19,8 @@ public class Inventories extends SingleNameObject {
     private static NamespacedKey key;
     private Inventory inv;
 
-    //Now the definitions
-    public static Inventories main;
-    public static Inventories weapons;
-    public static Inventories guns;
-
-    private static void setItems() {
-        Inventory inv;
-
-        inv = Bukkit.createInventory(null, 54, "HorizonShop");
-        inv.setItem(10, create("/shop.open %name weapons", Material.STONE_SWORD, "Weapons", "", 1));
-        inv.setItem(11, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        //inv.setItem(12, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        //inv.setItem(13, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        //inv.setItem(14, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        //inv.setItem(15, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        //inv.setItem(16, create("/shop.open %name guns", Material.STONE_HOE, "Guns", "", 1));
-        inv.setItem(38, create("/shop.close %name", Material.RED_STAINED_GLASS, "Close", "", 1));
-
-        fillAll(inv);
-        main = create("main", inv);
-
-        inv = Bukkit.createInventory(null, 54, "HorizonShop");
-        inv.setItem(13, create(Material.BEEF));
-        inv.setItem(38, create("/shop.open %name main", Material.RED_STAINED_GLASS, "Back", "", 1));
-        inv.setItem(42, create("/shop.buy %name Food", Material.GREEN_STAINED_GLASS, "Confirm", "", 1));
-        fillAll(inv);
-        weapons = create("weapons", inv);
-
-        inv = Bukkit.createInventory(null, 54, "HorizonShop");
-        fillAll(inv);
-        guns = create("guns", inv);
-
-    }
-
-
-
-
-
     //Functions and stuff
-    private static Inventories create(String name, org.bukkit.inventory.Inventory inv) {
+    static Inventories create(String name, org.bukkit.inventory.Inventory inv) {
         if (isTaken(name, Inventories.class)) return null;
         else return new Inventories(name, inv);
     }
@@ -70,7 +32,7 @@ public class Inventories extends SingleNameObject {
 
     public static void init(Plugin plugin) {
         key = new NamespacedKey(plugin, "my-key");
-        setItems();
+        Shop.setItems();
     }
 
     public static Inventories getByName(String name) {
@@ -103,7 +65,7 @@ public class Inventories extends SingleNameObject {
 
 
     //A bunch of overloaded helpful ItemStack constructors
-    private static ItemStack create(String onClick, Material material, String name, String lore, int amount) {
+    static ItemStack create(String onClick, Material material, String name, String lore, int amount) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -117,22 +79,22 @@ public class Inventories extends SingleNameObject {
         item.setItemMeta(meta);
         return item;
     }
-    private static ItemStack create(String onClick, Material material, String name, String lore) {
+    static ItemStack create(String onClick, Material material, String name, String lore) {
         return create(onClick, material, name, lore, 1);
     }
-    private static ItemStack create(String onClick, Material material, int amount) {
+    static ItemStack create(String onClick, Material material, int amount) {
         return create(onClick, material, material.name(), "", amount);
     }
-    private static ItemStack create(String onClick, Material material) {
+    static ItemStack create(String onClick, Material material) {
         return create(onClick, material, material.name(), "", 1);
     }
-    private static ItemStack create(Material material, int amount) {
+    static ItemStack create(Material material, int amount) {
         return create("", material, material.name(), "", amount);
     }
-    private static ItemStack create(Material material) {
+    static ItemStack create(Material material) {
         return create("", material, material.name(), "", 1);
     }
-    private static void fillAll(Inventory inventory) {
+    static void fillAll(Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             if (inventory.getItem(i) == null) {
                 inventory.setItem(i, create("", Material.LIGHT_GRAY_STAINED_GLASS_PANE, " ", ""));

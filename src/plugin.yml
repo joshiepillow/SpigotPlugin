@@ -43,8 +43,8 @@ commands:
     description: Create new quest
     usage: /<command> Username displayName cost command
   hunter.submit:
-    description: Submit a bounty
-    usage: /<command> Username
+    description: Submit Quests. If [Quest_Num] is missing, attempt to submit every Quest.
+    usage: /<command> Username [Quest_Num]
     permission: nope
   hunter.quests:
     description: Show all quests

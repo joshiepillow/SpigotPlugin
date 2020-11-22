@@ -8,13 +8,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 public class MyListener implements Listener
 {
@@ -55,6 +60,19 @@ public class MyListener implements Listener
     @EventHandler
     public void onVehicleExit(VehicleExitEvent event) {
 
+    }
+
+    @EventHandler
+    public void onDeath(EntityDeathEvent event) {
+        if (event.getEntity().getKiller() != null) {
+            List<ItemStack> i_list = event.getDrops();
+            ItemStack i = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta m = (SkullMeta) i.getItemMeta();
+            m.setOwningPlayer(Bukkit.getOfflinePlayer("MHF_" + event.getEntity().getName().replace(" ","")));
+            m.setDisplayName(event.getEntity().getName());
+            i.setItemMeta(m);
+            i_list.add(i);
+        }
     }
     /*@EventHandler
     public void onSprint(PlayerToggleSprintEvent e) {
