@@ -430,8 +430,10 @@ public class Main extends JavaPlugin {
                 else {
                     Player player = server.getPlayer(args[0]);
                     Inventories inv = Inventories.getByName(args[1]);
-                    if (player==null) sender.sendMessage("That player does not exist or is offline.");
-                    else if (inv==null) sender.sendMessage("That page does not exist.");
+                    if (player == null) 
+                    	sender.sendMessage("That player does not exist or is offline.");
+                    else if (inv == null) 
+                    	sender.sendMessage("That page does not exist.");
                     else {
                         player.openInventory(inv.getInventory());
                         sender.sendMessage("Success!");
@@ -474,16 +476,16 @@ public class Main extends JavaPlugin {
 
             case "start":
                 sender.sendMessage("§8Hey, " + sender.getName() + ". Welcome to §r§e§lGalaxiesHorizon!\n" +
-                        "§r§8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
+                        "�r�8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
                         " \n" +
-                        "§r§eTo get started type /name <your nickname>\n" +
+                        "�r�eTo get started type /nick <nick>\n" +
                         "List of commands:\n" +
-                        "     /name <your nickname> -- name yourself\n" +
-                        "     /shop -- open shop\n" +
-                        "     /me -- lists your info\n" +
-                        "     /start -- show this message again.");
+                        "     /nick <nick> 	-- name yourself\n" +
+                        "     /shop 		-- open shop\n" +
+                        "     /me 			-- lists your info\n" +
+                        "     /start 		-- show this message again.");
                 return true;
-            case "name":
+            case "nick":
                 if (sender instanceof Player) {
                     if (args.length < 1) sender.sendMessage("Please choose a name.");
                     else if (args.length > 1) sender.sendMessage("Name must be one word.");
@@ -500,7 +502,7 @@ public class Main extends JavaPlugin {
                 return true;
             case "shop":
                 if (sender instanceof Player) {
-                    if (BountyHunter.getByUsername(sender.getName())==null)
+                    if (BountyHunter.getByUsername(sender.getName()) == null)
                         sender.sendMessage("You need to choose a name first!");
                     else ((Player) sender).openInventory(Shop.main.getInventory());
                 } else sender.sendMessage("This command can only be run by a player.");

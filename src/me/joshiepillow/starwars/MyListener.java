@@ -1,6 +1,5 @@
 package me.joshiepillow.starwars;
 
-import me.joshiepillow.starwars.classes.Inventories;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -18,9 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.List;
-
 public class MyListener implements Listener
 {
     private JavaPlugin plugin;
@@ -30,7 +29,26 @@ public class MyListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);
+        // books are :pogchamp:
+    	ItemStack book;
+    	String booktext = 
+    			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
+    	        "This is a test" +
+    	        " \n" +
+    	        "Please enter text here" +
+    	        "Found in MyListener.java" +
+    	        "In MyListener.onPlayerrJoin" +
+    	        "At line 44" +
+    	        "Fill with text" +
+    	        "It no work-> contact me");
+    	
+    	// fuck you java for not supporting multiline string defines (C++/C supports it)
+    	((BookMeta) book.getItemMeta()).setPage(1, booktext);
+    	event.getPlayer().openBook(book);
+    	
+    	// also send a message for players
+    	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);
+    	// and we are done!
     }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
