@@ -33,12 +33,12 @@ public class MyListener implements Listener
     	ItemStack book;
     	String booktext = 
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
-    	        "This is a test" +
+    	        "This is a test\n" +
     	        " \n" +
-    	        "Please enter text here" +
-    	        "Found in MyListener.java" +
-    	        "In MyListener.onPlayerrJoin" +
-    	        "At line 44" +
+    	        "Please enter text here\n" +
+    	        "Found in MyListener.java\n" +
+    	        "In MyListener.onPlayerrJoin\n" +
+    	        "At line 44\n" +
     	        "Fill with text" +
     	        "It no work-> contact me");
     	
