@@ -1,6 +1,7 @@
 package me.joshiepillow.starwars;
 
 import me.joshiepillow.starwars.classes.Inventories;
+import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -36,7 +37,7 @@ public class MyListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         // books are :pogchamp:
-    	ItemStack book;
+    	ItemStack book = new ItemStack(Material.BOOK);
     	String booktext =
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
     	        "This is a test\n" +
@@ -48,13 +49,13 @@ public class MyListener implements Listener
     	        "Fill with text\n" +
     	        "It no work-> contact me\n";
 
-    	// fuck you java for not supporting multiline string defines (C++/C supports it)
+    	//NO CURSING IN THE COMMENTS
     	((BookMeta) book.getItemMeta()).setPage(1, booktext);
     	event.getPlayer().openBook(book);
 
     	if(!event.getPlayer().hasPlayedBefore()) {
             // give non rank
-            UserManager manager;
+            UserManager manager = LuckPermsProvider.get().getUserManager();
             final User user = manager.getUser(event.getPlayer().getUniqueId());
             user.setPrimaryGroup("non");
         }

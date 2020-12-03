@@ -50,8 +50,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
         Data d = Data.loadData("plugins/Starwars/data.ser");
         if (d != null) {
-            BountyHunter.SetAll(d.hunters);
-            Product.SetAll(d.products);
+            BountyHunter.setAll(d.hunters);
         }
         Bukkit.getLogger().info("Successfully loaded Starwars version" + this.getDescription().getVersion());
         Inventories.init(this);
@@ -62,7 +61,7 @@ public class Main extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        Data d = new Data(BountyHunter.getAll(), Product.getAll());
+        Data d = new Data(BountyHunter.getAll());
         d.saveData("plugins/Starwars/data.ser");
     }
 
@@ -410,7 +409,7 @@ public class Main extends JavaPlugin {
                 Player player = (Player) sender;
                 ItemMeta m = (player).getInventory().getItemInMainHand().getItemMeta();
                 if (m != null && m.getDisplayName().equals("Pig Head"))
-                    player.openInventory(Shop.main.getInventory());
+                    player.openInventory(Shop.MAIN.getInventory());
                 else {
                     if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.getInventory().setItemInMainHand(new ItemStack(Material.CARROT_ON_A_STICK));
@@ -511,7 +510,7 @@ public class Main extends JavaPlugin {
                 if (sender instanceof Player) {
                     if (BountyHunter.getByUsername(sender.getName()) == null)
                         sender.sendMessage("You need to choose a name first!");
-                    else ((Player) sender).openInventory(Shop.main.getInventory());
+                    else ((Player) sender).openInventory(Shop.MAIN.getInventory());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
             case "me":
