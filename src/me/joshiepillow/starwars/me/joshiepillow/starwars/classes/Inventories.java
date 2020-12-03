@@ -43,7 +43,7 @@ public class Inventories extends SingleNameObject {
         Player player = (Player) event.getWhoClicked(); // The player that clicked the item
         ItemStack clicked = event.getCurrentItem(); // The item that was clicked
         //Inventory inventory = event.getInventory(); // The inventory that was clicked in
-        if (clicked != null && clicked.getItemMeta() != null) {
+        if (clicked != null && clicked.getItemMeta() != null ) {
             PersistentDataContainer container = clicked.getItemMeta().getPersistentDataContainer();
             if (container.has(key, PersistentDataType.BYTE_ARRAY)) {
                 //player.sendMessage("Got to checkpoint A");

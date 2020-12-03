@@ -18,6 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.joshiepillow.starwars.classes.Inventories;
+import me.joshiepillow.starwars.Main;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
 
@@ -34,7 +36,7 @@ public class MyListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         // books are :pogchamp:
-    	ItemStack book;
+    	ItemStack book = new ItemStack(Material.BOOK);
     	String booktext = 
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
     	        "This is a test\n" +
@@ -46,16 +48,12 @@ public class MyListener implements Listener
     	        "Fill with text\n" +
     	        "It no work-> contact me\n";
     	
-    	// fuck you java for not supporting multiline string defines (C++/C supports it)
+    	// f**k you java for not supporting multiline string defines (C++/C supports it)
     	((BookMeta) book.getItemMeta()).setPage(1, booktext);
     	event.getPlayer().openBook(book);
-    	
     	// give non rank
-    	UserManager manager;
-    	final User user = manager.getUser(event.getPlayer().getUniqueId());
-    	user.setPrimaryGroup("non");
-    	
-    	if(!event.getPlayer().hasPlayedBefore())
+    	((Main) this.plugin).api.getUserManager().getUser(event.getPlayer().getUniqueId()).setPrimaryGroup("non");
+    	//if(!event.getPlayer().hasPlayedBefore())
     		
     	
     	// also send a message for players
