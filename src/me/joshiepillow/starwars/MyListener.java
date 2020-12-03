@@ -17,6 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
+
 import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.List;
@@ -39,12 +43,20 @@ public class MyListener implements Listener
     	        "Found in MyListener.java\n" +
     	        "In MyListener.onPlayerrJoin\n" +
     	        "At line 44\n" +
-    	        "Fill with text" +
-    	        "It no work-> contact me");
+    	        "Fill with text\n" +
+    	        "It no work-> contact me\n";
     	
     	// fuck you java for not supporting multiline string defines (C++/C supports it)
     	((BookMeta) book.getItemMeta()).setPage(1, booktext);
     	event.getPlayer().openBook(book);
+    	
+    	// give non rank
+    	UserManager manager;
+    	final User user = manager.getUser(event.getPlayer().getUniqueId());
+    	user.setPrimaryGroup("non");
+    	
+    	if(!event.getPlayer().hasPlayedBefore())
+    		
     	
     	// also send a message for players
     	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);

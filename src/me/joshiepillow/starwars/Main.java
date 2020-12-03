@@ -38,6 +38,13 @@ public class Main extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+    	// start luckperms API
+    	RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+    	if (provider != null) {
+    	    LuckPerms api = provider.getProvider();
+    	    
+    	}
+    	
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
         Data d = Data.loadData("plugins/Starwars/data.ser");
         if (d != null) {
