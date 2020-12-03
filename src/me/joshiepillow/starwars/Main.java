@@ -4,6 +4,8 @@ import me.joshiepillow.starwars.classes.BountyHunter;
 import me.joshiepillow.starwars.classes.Inventories;
 import me.joshiepillow.starwars.classes.Product;
 import me.joshiepillow.starwars.classes.Shop;
+import net.luckperms.api.LuckPerms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -42,7 +45,6 @@ public class Main extends JavaPlugin {
     	RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
     	if (provider != null) {
     	    LuckPerms api = provider.getProvider();
-    	    
     	}
     	
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
