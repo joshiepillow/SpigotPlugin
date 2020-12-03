@@ -15,7 +15,7 @@ class Quest implements Serializable {
     private String complete_command;
 
     static Quest create(String type, String item_name, int count, String complete_command) {
-        if (!type.equals("mob")) return null;
+        if (!type.equals("mob") && !type.equals("player")) return null;
         else return new Quest(type, item_name, count, complete_command);
     }
     private Quest(String type, String item_name, int count, String complete_command) {
@@ -39,7 +39,7 @@ class Quest implements Serializable {
         for(int i = 0; i < inv.getSize(); i++) {
             ItemStack a = inv.getItem(i);
             if (a != null && a.getType().equals(Material.PLAYER_HEAD)) {
-                if (a.getItemMeta() != null && a.getItemMeta().getDisplayName()==item_name) {
+                if (a.getItemMeta() != null && a.getItemMeta().getDisplayName().equals(item_name)) {
                     count += a.getAmount();
                 }
             }

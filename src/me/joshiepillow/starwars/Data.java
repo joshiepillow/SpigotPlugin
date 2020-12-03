@@ -1,8 +1,6 @@
 package me.joshiepillow.starwars;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import me.joshiepillow.starwars.classes.BountyHunter;
-import me.joshiepillow.starwars.classes.Product;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -47,12 +45,10 @@ public class Data implements Serializable {
     }
 
     public final List<BountyHunter> hunters;
-    public final List<Product> products;
 
     // Can be used for saving
-    public Data(List<BountyHunter> hunters, List<Product> products) {
+    public Data(List<BountyHunter> hunters) {
         this.hunters = hunters;
-        this.products = products;
 
     }
     // Can be used for loading
@@ -61,10 +57,6 @@ public class Data implements Serializable {
             this.hunters = loadedData.hunters;
         else
             this.hunters = new ArrayList<>();
-        if (loadedData.products != null)
-            this.products = loadedData.products;
-        else
-            this.products = new ArrayList<>();
     }
 
 }

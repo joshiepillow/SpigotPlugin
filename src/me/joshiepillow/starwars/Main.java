@@ -44,12 +44,11 @@ public class Main extends JavaPlugin {
     	if (provider != null) {
     	    api = provider.getProvider();
     	}
-    	
+
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
         Data d = Data.loadData("plugins/Starwars/data.ser");
         if (d != null) {
-            BountyHunter.SetAll(d.hunters);
-            Product.SetAll(d.products);
+            BountyHunter.setAll(d.hunters);
         }
         Bukkit.getLogger().info("Successfully loaded Starwars version" + this.getDescription().getVersion());
         Inventories.init(this);
@@ -60,7 +59,7 @@ public class Main extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        Data d = new Data(BountyHunter.getAll(), Product.getAll());
+        Data d = new Data(BountyHunter.getAll());
         d.saveData("plugins/Starwars/data.ser");
     }
 
@@ -408,7 +407,7 @@ public class Main extends JavaPlugin {
                 Player player = (Player) sender;
                 ItemMeta m = (player).getInventory().getItemInMainHand().getItemMeta();
                 if (m != null && m.getDisplayName().equals("Pig Head"))
-                    player.openInventory(Shop.main.getInventory());
+                    player.openInventory(Shop.MAIN.getInventory());
                 else {
                     if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.getInventory().setItemInMainHand(new ItemStack(Material.CARROT_ON_A_STICK));
@@ -437,10 +436,8 @@ public class Main extends JavaPlugin {
                 else {
                     Player player = server.getPlayer(args[0]);
                     Inventories inv = Inventories.getByName(args[1]);
-                    if (player == null) 
-                    	sender.sendMessage("That player does not exist or is offline.");
-                    else if (inv == null) 
-                    	sender.sendMessage("That page does not exist.");
+                    if (player==null) sender.sendMessage("That player does not exist or is offline.");
+                    else if (inv==null) sender.sendMessage("That page does not exist.");
                     else {
                         player.openInventory(inv.getInventory());
                         sender.sendMessage("Success!");
@@ -483,9 +480,9 @@ public class Main extends JavaPlugin {
 
             case "start":
                 sender.sendMessage("§8Hey, " + sender.getName() + ". Welcome to §r§e§lGalaxiesHorizon!\n" +
-                        "�r�8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
+                        "§r§8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
                         " \n" +
-                        "�r�eTo get started type /nick <nick>\n" +
+                        "§r§eTo get started type /name <your nickname>\n" +
                         "List of commands:\n" +
                         "     /nick <nick> 	-- name yourself\n" +
                         "     /shop 		-- open shop\n" +
@@ -511,7 +508,7 @@ public class Main extends JavaPlugin {
                 if (sender instanceof Player) {
                     if (BountyHunter.getByUsername(sender.getName()) == null)
                         sender.sendMessage("You need to choose a name first!");
-                    else ((Player) sender).openInventory(Shop.main.getInventory());
+                    else ((Player) sender).openInventory(Shop.MAIN.getInventory());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
             case "me":

@@ -1,5 +1,7 @@
 package me.joshiepillow.starwars;
 
+import me.joshiepillow.starwars.classes.Inventories;
+import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -26,6 +28,7 @@ import net.luckperms.api.model.user.UserManager;
 import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.List;
+
 public class MyListener implements Listener
 {
     private JavaPlugin plugin;
@@ -37,7 +40,8 @@ public class MyListener implements Listener
     {
         // books are :pogchamp:
     	ItemStack book = new ItemStack(Material.BOOK);
-    	String booktext = 
+    	
+    	String booktext =
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
     	        "This is a test\n" +
     	        " \n" +
@@ -52,10 +56,9 @@ public class MyListener implements Listener
     	((BookMeta) book.getItemMeta()).setPage(1, booktext);
     	event.getPlayer().openBook(book);
     	// give non rank
-    	((Main) this.plugin).api.getUserManager().getUser(event.getPlayer().getUniqueId()).setPrimaryGroup("non");
-    	//if(!event.getPlayer().hasPlayedBefore())
-    		
-    	
+    	if(!event.getPlayer().hasPlayedBefore())
+    		((Main) this.plugin).api.getUserManager().getUser(event.getPlayer().getUniqueId()).setPrimaryGroup("non");
+
     	// also send a message for players
     	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);
     	// and we are done!

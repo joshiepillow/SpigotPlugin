@@ -29,6 +29,7 @@ public class BountyHunter extends SingleNameObject {
      * @return new BountyHunter, if name is taken, null
      */
     public static BountyHunter create(String username, String name) {
+        if (name.equals("")) return new BountyHunter(username, "");
         if (isTaken(name, BountyHunter.class)) return null;
         return new BountyHunter(username, name);
     }
@@ -52,6 +53,15 @@ public class BountyHunter extends SingleNameObject {
      */
     public boolean setName(String name) {
         return setName(name, BountyHunter.class);
+    }
+
+    public String getName() {
+        System.out.println(super.getName());
+        if (super.getName().equals("")) {
+            return username;
+        } else {
+            return super.getName();
+        }
     }
 
     /**
@@ -84,14 +94,14 @@ public class BountyHunter extends SingleNameObject {
      */
     @Override
     public String toString() {
-        return getName() + " -- " + credits + "C";
+        return this.getName() + " -- " + credits + "C";
     }
 
     /**
      * Sets all data and names
      * @param list input from serialized
      */
-    public static void SetAll(List<BountyHunter> list) {
+    public static void setAll(List<BountyHunter> list) {
         setAll(list, BountyHunter.class);
     }
 
