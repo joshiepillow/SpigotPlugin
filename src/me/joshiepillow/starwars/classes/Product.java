@@ -20,7 +20,7 @@ public class Product extends SingleNameObject {
      * @param command command to run
      * @return new Product, if name is taken, null
      */
-    public static Product create(String name, int cost, String command) {
+    static Product create(String name, int cost, String command) {
         if (isTaken(name, Product.class)) return null;
         return new Product(name, cost, command);
     }
@@ -51,7 +51,7 @@ public class Product extends SingleNameObject {
      * @param name name to set to
      * @return if successful
      */
-    public boolean setName(String name) {
+    boolean setName(String name) {
         return setName(name, Product.class);
     }
 
@@ -59,7 +59,7 @@ public class Product extends SingleNameObject {
      * Simple setter
      * @param command command to set to
      */
-    public void setCommand(String command) {
+    void setCommand(String command) {
         this.command = command;
     }
 
@@ -92,7 +92,7 @@ public class Product extends SingleNameObject {
      * Simple setter
      * @param cost what to set cost to
      */
-    public void setCost(int cost) {
+    void setCost(int cost) {
         this.cost = cost;
     }
 
@@ -108,7 +108,7 @@ public class Product extends SingleNameObject {
      * Sets all data and names
      * @param list input from serialized
      */
-    public static void SetAll(List<Product> list) {
+    public static void setAll(List<Product> list) {
         setAll(list, Product.class);
     }
 

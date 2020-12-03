@@ -46,7 +46,7 @@ public class Main extends JavaPlugin {
     	if (provider != null) {
     	    LuckPerms api = provider.getProvider();
     	}
-    	
+
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
         Data d = Data.loadData("plugins/Starwars/data.ser");
         if (d != null) {
@@ -439,10 +439,8 @@ public class Main extends JavaPlugin {
                 else {
                     Player player = server.getPlayer(args[0]);
                     Inventories inv = Inventories.getByName(args[1]);
-                    if (player == null) 
-                    	sender.sendMessage("That player does not exist or is offline.");
-                    else if (inv == null) 
-                    	sender.sendMessage("That page does not exist.");
+                    if (player==null) sender.sendMessage("That player does not exist or is offline.");
+                    else if (inv==null) sender.sendMessage("That page does not exist.");
                     else {
                         player.openInventory(inv.getInventory());
                         sender.sendMessage("Success!");
@@ -485,9 +483,9 @@ public class Main extends JavaPlugin {
 
             case "start":
                 sender.sendMessage("§8Hey, " + sender.getName() + ". Welcome to §r§e§lGalaxiesHorizon!\n" +
-                        "�r�8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
+                        "§r§8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
                         " \n" +
-                        "�r�eTo get started type /nick <nick>\n" +
+                        "§r§eTo get started type /name <your nickname>\n" +
                         "List of commands:\n" +
                         "     /nick <nick> 	-- name yourself\n" +
                         "     /shop 		-- open shop\n" +

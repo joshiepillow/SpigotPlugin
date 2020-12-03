@@ -1,6 +1,6 @@
 main: me.joshiepillow.starwars.Main
 name: starwars
-version: 0.6.8
+version: 1.0.0
 author: me
 description: An Example plugin
 api-version: 1.16
@@ -102,9 +102,13 @@ commands:
     description: Get started.
     usage: /<command>
   name:
-    description: Create a name.
+    description: Rename yourself.
     usage: /<command> name
-  me:
+    permission: INSERT_PERMISSIONS_HERE
+#  create:
+#    description: Create a bounty hunter.
+#    usage: /<command>
+  bal:
     description: Get info about yourself.
     usage: /<command>
   list:
@@ -112,4 +116,7 @@ commands:
     usage: /<command>
   shop:
     description: Opens the shop.
+    usage: /<command>
+  quests:
+    description: Open the quest list.
     usage: /<command>

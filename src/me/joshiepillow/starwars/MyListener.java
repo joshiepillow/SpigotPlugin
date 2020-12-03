@@ -1,5 +1,6 @@
 package me.joshiepillow.starwars;
 
+import me.joshiepillow.starwars.classes.Inventories;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -24,6 +25,7 @@ import net.luckperms.api.model.user.UserManager;
 import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.List;
+
 public class MyListener implements Listener
 {
     private JavaPlugin plugin;
@@ -35,7 +37,7 @@ public class MyListener implements Listener
     {
         // books are :pogchamp:
     	ItemStack book;
-    	String booktext = 
+    	String booktext =
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
     	        "This is a test\n" +
     	        " \n" +
@@ -45,19 +47,19 @@ public class MyListener implements Listener
     	        "At line 44\n" +
     	        "Fill with text\n" +
     	        "It no work-> contact me\n";
-    	
+
     	// fuck you java for not supporting multiline string defines (C++/C supports it)
     	((BookMeta) book.getItemMeta()).setPage(1, booktext);
     	event.getPlayer().openBook(book);
-    	
-    	// give non rank
-    	UserManager manager;
-    	final User user = manager.getUser(event.getPlayer().getUniqueId());
-    	user.setPrimaryGroup("non");
-    	
-    	if(!event.getPlayer().hasPlayedBefore())
-    		
-    	
+
+    	if(!event.getPlayer().hasPlayedBefore()) {
+            // give non rank
+            UserManager manager;
+            final User user = manager.getUser(event.getPlayer().getUniqueId());
+            user.setPrimaryGroup("non");
+        }
+
+
     	// also send a message for players
     	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);
     	// and we are done!
