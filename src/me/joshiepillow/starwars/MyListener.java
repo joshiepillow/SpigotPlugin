@@ -39,8 +39,7 @@ public class MyListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         // books are :pogchamp:
-    	ItemStack book = new ItemStack(Material.BOOK);
-    	
+    	ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
     	String booktext =
     			"&7Welcome to &r&e&lGalaxies Horizon&r&7!\n" +
     	        "This is a test\n" +
