@@ -22,6 +22,8 @@ public class BountyHunter extends SingleNameObject {
      */
     private int credits;
 
+    public ItemStack Lightsaber; //null if none
+
     /**
      * Safe constructor
      * @param username player username

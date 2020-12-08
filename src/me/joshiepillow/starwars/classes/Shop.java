@@ -15,7 +15,7 @@ public class Shop {
     public static Inventories ARMOR;
 
 
-    static void setItems() {
+    public static void setItems() {
         Inventory inv;
 
         inv = Bukkit.createInventory(null, 54, "HorizonShop");

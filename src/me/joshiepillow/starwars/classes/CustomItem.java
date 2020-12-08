@@ -17,9 +17,9 @@ public class CustomItem {
     //much better than commands
 
     //Lightsabers
-    static ItemStack GREEN_LIGHTSABER;
-    static ItemStack BLUE_LIGHTSABER;
-    static ItemStack RED_LIGHTSABER;
+    public static ItemStack GREEN_LIGHTSABER;
+    public static ItemStack BLUE_LIGHTSABER;
+    public static ItemStack RED_LIGHTSABER;
 
     public static void setItems() {
         ItemMeta m;
@@ -28,7 +28,10 @@ public class CustomItem {
         m = GREEN_LIGHTSABER.getItemMeta();
         assert m != null;
         m.setDisplayName("Green Lightsaber");
-        m.setLore(new ArrayList<String>(){{add("Damage: 1");}});
+        m.setLore(new ArrayList<String>(){{
+            add("Lightsaber");
+            add("Damage: 1");
+        }});
         m.addEnchant(Enchantment.CHANNELING, 1, false);
         m.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
                 new AttributeModifier(UUID.randomUUID(), "damage", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
@@ -39,11 +42,27 @@ public class CustomItem {
         m = BLUE_LIGHTSABER.getItemMeta();
         assert m != null;
         m.setDisplayName("Blue Lightsaber");
+        m.setLore(new ArrayList<String>(){{
+            add("Lightsaber");
+            add("Damage: 1");
+        }});
+        m.addEnchant(Enchantment.CHANNELING, 1, false);
+        m.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+                new AttributeModifier(UUID.randomUUID(), "damage", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         BLUE_LIGHTSABER.setItemMeta(m);
 
         RED_LIGHTSABER = new ItemStack(Material.DIAMOND_SWORD);
         m = RED_LIGHTSABER.getItemMeta();
         assert m != null;
+        m.setLore(new ArrayList<String>(){{
+            add("Lightsaber");
+            add("Damage: 1");
+        }});
+        m.addEnchant(Enchantment.CHANNELING, 1, false);
+        m.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+                new AttributeModifier(UUID.randomUUID(), "damage", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         m.setDisplayName("Red Lightsaber");
         RED_LIGHTSABER.setItemMeta(m);
     }

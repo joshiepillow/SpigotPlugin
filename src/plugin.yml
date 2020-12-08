@@ -1,6 +1,6 @@
 main: me.joshiepillow.starwars.Main
 name: starwars
-version: 1.0.0
+version: 1.5.0
 author: me
 description: An Example plugin
 api-version: 1.16
@@ -120,3 +120,4 @@ commands:
   quests:
     description: Open the quest list.
     usage: /<command>
+depend: [LuckPerms]

@@ -1,9 +1,6 @@
 package me.joshiepillow.starwars;
 
-import me.joshiepillow.starwars.classes.BountyHunter;
-import me.joshiepillow.starwars.classes.Inventories;
-import me.joshiepillow.starwars.classes.Product;
-import me.joshiepillow.starwars.classes.Shop;
+import me.joshiepillow.starwars.classes.*;
 import net.luckperms.api.LuckPerms;
 
 import org.bukkit.Bukkit;
@@ -53,7 +50,11 @@ public class Main extends JavaPlugin {
             BountyHunter.setAll(d.hunters);
         }
         Bukkit.getLogger().info("Successfully loaded Starwars version" + this.getDescription().getVersion());
+        CustomItem.setItems();
+        Recipes.setItems(this);
+        Products.setItems();
         Inventories.init(this);
+        Shop.setItems();
     }
 
     /**
@@ -486,10 +487,10 @@ public class Main extends JavaPlugin {
                         " \n" +
                         "§r§eTo get started type /name <your nickname>\n" +
                         "List of commands:\n" +
-                        "     /nick <nick> 	-- name yourself\n" +
-                        "     /shop 		-- open shop\n" +
-                        "     /me 			-- lists your info\n" +
-                        "     /start 		-- show this message again.");
+                        "     /nick <nick>  -- name yourself\n" +
+                        "     /shop         -- open shop\n" +
+                        "     /me           -- lists your info\n" +
+                        "     /start        -- show this message again.");
                 return true;
             case "nick":
                 if (sender instanceof Player) {

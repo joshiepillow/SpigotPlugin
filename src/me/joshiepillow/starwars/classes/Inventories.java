@@ -32,7 +32,6 @@ public class Inventories extends SingleNameObject {
 
     public static void init(Plugin plugin) {
         key = new NamespacedKey(plugin, "shop-key");
-        Shop.setItems();
     }
 
     public static NamespacedKey getKey() {return key;}

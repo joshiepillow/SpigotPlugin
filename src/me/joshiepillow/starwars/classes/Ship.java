@@ -1,7 +1,6 @@
-package me.joshiepillow.starwars.classes;
+/*package me.joshiepillow.starwars.classes;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -10,7 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +42,6 @@ public class Ship {
 
         //if (Ship.isOnShip(event.getPlayer())) {
         if (true) {
-            /*if (event.getPlayer().isSneaking()) {
-                y-=1;
-            }
-            x = (event.getTo().getX()-event.getFrom().getX())/2;
-            z = (event.getTo().getZ()-event.getFrom().getZ())/2;
-            event.getPlayer().sendMessage(x + " " + y + " " + z);
-            event.getPlayer().setVelocity(new Vector(x, y, z));*/
             if (event.getPlayer().isSneaking()) {
                 event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(0.3));
             } else {
@@ -59,3 +50,4 @@ public class Ship {
         }
     }
 }
+*/
