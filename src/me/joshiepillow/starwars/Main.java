@@ -33,15 +33,13 @@ public class Main extends JavaPlugin {
      */
     private Server server = getServer();
 
-    /**
-     * Connects listener and gets saved data
-     */
+    public LuckPerms api;
     @Override
     public void onEnable() {
     	// start luckperms API
     	RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
     	if (provider != null) {
-    	    LuckPerms api = provider.getProvider();
+    	    api = provider.getProvider();
     	}
 
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
