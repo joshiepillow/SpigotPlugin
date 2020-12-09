@@ -214,7 +214,7 @@ public class MyListener implements Listener
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
         if (event.getEntity() instanceof  Creature) {
             event.getEntity().addPotionEffect(
@@ -222,5 +222,5 @@ public class MyListener implements Listener
                     1, false, false));
             event.getEntity().getEquipment().setHelmet(helmets[0]);
         }
-    }
+    }*/
 }
