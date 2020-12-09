@@ -1,9 +1,10 @@
 package me.joshiepillow.starwars.classes;
 
+import me.joshiepillow.CustomItems.CustomItems;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
-import me.joshiepillow.starwars.classes.Inventories.*;
+import org.bukkit.inventory.ItemStack;
 
 public class Shop {
 
@@ -16,6 +17,8 @@ public class Shop {
 
 
     public static void setItems() {
+
+
         Inventory inv;
 
         inv = Bukkit.createInventory(null, 54, "HorizonShop");
@@ -91,4 +94,11 @@ public class Shop {
         ARMOR = Inventories.create("armor", inv);
 
     }
+
+    /*public static ItemStack Test(Product product) {
+        CustomItems c = new CustomItems();
+        c.onInventoryEvent = event -> {
+            BountyHunter.getByUsername(event.getWhoClicked().getName())
+        }
+    }*/
 }

@@ -5,12 +5,15 @@ import me.joshiepillow.starwars.classes.CustomItem;
 import me.joshiepillow.starwars.classes.Force;
 import me.joshiepillow.starwars.classes.Inventories;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -27,6 +30,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +40,38 @@ import java.util.Objects;
 
 public class MyListener implements Listener
 {
+    static ItemStack[] helmets = {
+            new ItemStack(Material.LEATHER_HELMET),
+            new ItemStack(Material.CHAINMAIL_HELMET),
+            new ItemStack(Material.IRON_HELMET),
+            new ItemStack(Material.GOLDEN_HELMET),
+            new ItemStack(Material.DIAMOND_HELMET),
+            new ItemStack(Material.NETHERITE_HELMET),
+    };
+
     private JavaPlugin plugin;
     MyListener(JavaPlugin plugin) {
         this.plugin = plugin;
+        /*Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()->{
+            //System.out.println(Bukkit.getPlayer("Joshiepillow").getVelocity().length());
+            for (int i = 0; i < Bukkit.getWorlds().size(); i++){
+                List<LivingEntity> l = Bukkit.getWorlds().get(i).getLivingEntities();
+                l.forEach((creature -> {
+                    if (creature instanceof Creature) {
+                        Double d = 0.01;
+                        if (!creature.getVelocity().isInSphere(new Vector(0,0,0), d)) {
+                            creature.getEquipment().setHelmet(helmets[1]);
+                        } else {
+                            creature.getEquipment().setHelmet(helmets[0]);
+                        }
+                    }
+                }));
+            }
+        }, 0, 1);*/
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        event.getPlayer().setRotation(0, 90);
         // books are :pogchamp:
     	ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
     	List<String> booktext = new ArrayList<String>(){{
@@ -73,8 +103,8 @@ public class MyListener implements Listener
             assert user != null;
             user.setPrimaryGroup("non");
         }
-    	if (BountyHunter.getByUsername(event.getPlayer().getName())==null)
-            BountyHunter.create(event.getPlayer().getDisplayName(), "");
+    	if (BountyHunter.getByUUID(event.getPlayer().getUniqueId())==null)
+            BountyHunter.create(event.getPlayer().getUniqueId(), "");
 
 
     	// also send a message for players
@@ -147,7 +177,7 @@ public class MyListener implements Listener
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        BountyHunter b = BountyHunter.getByUsername(event.getPlayer().getName());
+        BountyHunter b = BountyHunter.getByUUID(event.getPlayer().getUniqueId());
         if (b != null && b.Lightsaber != null)
             event.getPlayer().getInventory().addItem(b.Lightsaber);
     }
@@ -171,7 +201,7 @@ public class MyListener implements Listener
         if (event.getRecipe().getResult().getItemMeta() != null &&
             event.getRecipe().getResult().getItemMeta().getDisplayName().contains("Lightsaber")) {
             System.out.println("A");
-            BountyHunter b = BountyHunter.getByUsername(event.getWhoClicked().getName());
+            BountyHunter b = BountyHunter.getByUUID(event.getWhoClicked().getUniqueId());
             if (b != null && b.Lightsaber != null) {
                 System.out.println("B");
                 event.setCancelled(true);
@@ -184,4 +214,13 @@ public class MyListener implements Listener
         }
     }
 
+    @EventHandler
+    public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
+        if (event.getEntity() instanceof  Creature) {
+            event.getEntity().addPotionEffect(
+                    new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE,
+                    1, false, false));
+            event.getEntity().getEquipment().setHelmet(helmets[0]);
+        }
+    }
 }

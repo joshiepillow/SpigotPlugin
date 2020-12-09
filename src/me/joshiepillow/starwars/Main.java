@@ -154,20 +154,20 @@ public class Main extends JavaPlugin {
             case "hunter.create": {
                 if (args.length == 1) {
                     if (!(sender instanceof Player)) return false;
-                    if (BountyHunter.getByUsername(sender.getName()) != null) {
+                    if (BountyHunter.getByUUID(((Player) sender).getUniqueId()) != null) {
                         sender.sendMessage("You already have a BountyHunter");
                         return true;
                     }
-                    h = BountyHunter.create(sender.getName(), args[0]);
+                    h = BountyHunter.create(((Player) sender).getUniqueId(), args[0]);
                     sender.sendMessage("New BountyHunter created.");
                     return true;
                 } else if (args.length == 2) {
                     Player player = server.getPlayer(args[0]);
                     if (player == null) sender.sendMessage("Player is not online or does not exist.");
-                    else if (BountyHunter.getByUsername(player.getName()) != null)
+                    else if (BountyHunter.getByUUID(player.getUniqueId()) != null)
                         sender.sendMessage("Player is already a BountyHunter.");
                     else {
-                        h = BountyHunter.create(player.getName(), args[1]);
+                        h = BountyHunter.create(player.getUniqueId(), args[1]);
                         sender.sendMessage("New BountyHunter created.");
                     }
                     return true;
@@ -176,7 +176,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.name": {
                 if (args.length != 2) return false;
-                h = BountyHunter.getByUsername(args[0]);
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                 if (h == null) {
                     sender.sendMessage("BountyHunter does not exist.");
                     return true;
@@ -189,14 +189,14 @@ public class Main extends JavaPlugin {
                 StringBuilder s = new StringBuilder();
                 for (int i = 0; i < BountyHunter.getAll().size(); i++) {
                     h = BountyHunter.getAll().get(i);
-                    s.append("(").append(h.getUsername()).append(")").append(h.toString()).append("\n");
+                    s.append(h.toString()).append("\n");
                 }
                 sender.sendMessage(s.toString());
                 return true;
             }
             case "hunter.bal": {
                 if (args.length == 1) {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     if (h == null) {
                         sender.sendMessage("BountyHunter does not exist.");
                         return true;
@@ -205,7 +205,7 @@ public class Main extends JavaPlugin {
                     return true;
                 }
                 if (args.length == 2) {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     if (h == null) {
                         sender.sendMessage("BountyHunter does not exist.");
                         return true;
@@ -219,7 +219,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.buy": {
                 if (args.length == 2) {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     p = Product.getByName(args[1]);
                     if (h!=null && p!=null) {
                         List<String> s = h.buy(p);
@@ -240,7 +240,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.quest": {
                 if (args.length <  4) return false;
-                h = BountyHunter.getByUsername(args[0]);
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                 if (h != null) {
                     StringBuilder s = new StringBuilder();
                     for(int i = 3; i < args.length; i++) {
@@ -254,7 +254,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.submit": {
                 if (args.length == 1) {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     Player player = Bukkit.getPlayer(args[0]);
                     if (h != null && player != null) {
                         List<String> s = h.submit(player.getInventory());
@@ -265,7 +265,7 @@ public class Main extends JavaPlugin {
                     } else sender.sendMessage("Player or BountyHunter does not exist.");
                     return true;
                 } else if (args.length == 2) {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     Player player = Bukkit.getPlayer(args[0]);
                     if (h != null && player != null) {
                         List<String> s = h.submit(player.getInventory(), Integer.parseInt(args[1]));
@@ -278,7 +278,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.quests": {
                 if (args.length != 1) return false;
-                h = BountyHunter.getByUsername(args[0]);
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                 if (h!=null) {
                     System.out.println("Checkpoint A");
                     if (sender instanceof Player) {
@@ -293,7 +293,7 @@ public class Main extends JavaPlugin {
             }
             case "hunter.erase": {
                 if (args.length != 1) return false;
-                h = BountyHunter.getByUsername(args[0]);
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                 if (h == null) sender.sendMessage("Product does not exist.");
                 else {
                     h.erase();
@@ -461,7 +461,7 @@ public class Main extends JavaPlugin {
             case "shop.buy": {
                 if (args.length != 2) return false;
                 else {
-                    h = BountyHunter.getByUsername(args[0]);
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     p = Product.getByName(args[1]);
                     if (h != null && p != null) {
                         List<String> s = h.buy(p);
@@ -495,9 +495,9 @@ public class Main extends JavaPlugin {
                     if (args.length < 1) sender.sendMessage("Please choose a name.");
                     else if (args.length > 1) sender.sendMessage("Name must be one word.");
                     else {
-                        if (BountyHunter.getByUsername(args[0]) != null)
+                        if (BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId()) != null)
                             sender.sendMessage("You already chose your name!");
-                        else if (BountyHunter.create(sender.getName(), args[0]) == null)
+                        else if (BountyHunter.create(((Player) sender).getUniqueId(), args[0]) == null)
                             sender.sendMessage("That name is already taken!");
                         else sender.sendMessage("Success!");
                         return true;
@@ -507,14 +507,14 @@ public class Main extends JavaPlugin {
                 return true;
             case "shop":
                 if (sender instanceof Player) {
-                    if (BountyHunter.getByUsername(sender.getName()) == null)
+                    if (BountyHunter.getByUUID(Bukkit.getPlayer(sender.getName()).getUniqueId()) == null)
                         sender.sendMessage("You need to choose a name first!");
                     else ((Player) sender).openInventory(Shop.MAIN.getInventory());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
             case "me":
                 if (sender instanceof Player) {
-                    h = BountyHunter.getByUsername(sender.getName());
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(sender.getName()).getUniqueId());
                     if (h==null) sender.sendMessage("You need to choose a name first!");
                     else sender.sendMessage(h.toString());
                 } else sender.sendMessage("This command can only be run by a player.");

@@ -1,6 +1,6 @@
 package me.joshiepillow.starwars.classes;
 
-import com.google.common.collect.Multimap;
+import me.joshiepillow.CustomItems.CustomItems;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -22,6 +22,10 @@ public class CustomItem {
     public static ItemStack RED_LIGHTSABER;
 
     public static void setItems() {
+
+
+
+
         ItemMeta m;
 
         GREEN_LIGHTSABER = new ItemStack(Material.IRON_SWORD);
@@ -65,5 +69,6 @@ public class CustomItem {
         m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         m.setDisplayName("Red Lightsaber");
         RED_LIGHTSABER.setItemMeta(m);
+
     }
 }

@@ -8,12 +8,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BountyHunter extends SingleNameObject {
     /**
      * Player username
      */
-    private String username;
+    private UUID UUID;
 
     private List<Quest> quests = new ArrayList<>();
 
@@ -26,24 +27,24 @@ public class BountyHunter extends SingleNameObject {
 
     /**
      * Safe constructor
-     * @param username player username
+     * @param UUID player UUID
      * @param name wanted BountyName
      * @return new BountyHunter, if name is taken, null
      */
-    public static BountyHunter create(String username, String name) {
-        if (name.equals("")) return new BountyHunter(username, "");
+    public static BountyHunter create(UUID UUID, String name) {
+        if (name.equals("")) return new BountyHunter(UUID, "");
         if (isTaken(name, BountyHunter.class)) return null;
-        return new BountyHunter(username, name);
+        return new BountyHunter(UUID, name);
     }
 
     /**
      * Unsafe constructor
-     * @param username player username
+     * @param UUID player UUID
      * @param name wanted BountyName
      */
-    private BountyHunter(String username, String name) {
+    private BountyHunter(UUID UUID, String name) {
         super(name);
-        this.username = username;
+        this.UUID = UUID;
         credits = 0;
     }
 
@@ -60,7 +61,7 @@ public class BountyHunter extends SingleNameObject {
     public String getName() {
         System.out.println(super.getName());
         if (super.getName().equals("")) {
-            return username;
+            return Bukkit.getOfflinePlayer(UUID).getName();
         } else {
             return super.getName();
         }
@@ -86,9 +87,9 @@ public class BountyHunter extends SingleNameObject {
         return true;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    //public String getUsername() {
+    //    return username;
+    //}
 
     /**
      * Simple toString method
@@ -117,14 +118,13 @@ public class BountyHunter extends SingleNameObject {
 
     /**
      * Finds a bountyhunter by username
-     * @param s username to match to
+     * @param UUID UUID to match to
      * @return BountyHunter that matches, if none returns null
      */
-    public static BountyHunter getByUsername(String s) {
-        s = s.toLowerCase();
+    public static BountyHunter getByUUID(UUID UUID) {
         List<BountyHunter> hunters = BountyHunter.getAll();
         for (BountyHunter hunter : hunters) {
-            if (hunter.username.toLowerCase().equals(s)) {
+            if (hunter.UUID.equals(UUID)) {
                 return hunter;
             }
         }
@@ -139,7 +139,7 @@ public class BountyHunter extends SingleNameObject {
     public List<String> buy(Product p) {
         if (changeBal(-p.getCost())) {
             List<String> out = new ArrayList<>();
-            String s = p.getCommand(username);
+            String s = p.getCommand(Bukkit.getOfflinePlayer(UUID).getName());
             for (String dat : s.split("/")) {
                 if (!dat.isEmpty()) {
                     out.add(dat);
@@ -166,7 +166,7 @@ public class BountyHunter extends SingleNameObject {
             String s = datum.submit(i);
             if (s!=null) {
                 quests.remove(datum);
-                for (String dat : s.replace("%name", username).split("/")) {
+                for (String dat : s.replace("%name", Bukkit.getOfflinePlayer(UUID).getName()).split("/")) {
                     if (!dat.isEmpty()) {
                         out.add(dat);
                     }
@@ -181,7 +181,7 @@ public class BountyHunter extends SingleNameObject {
         String s = q.submit(i);
         if (s!=null) {
             quests.remove(num);
-            for (String dat : s.replace("%name", username).split("/")) {
+            for (String dat : s.replace("%name", Bukkit.getOfflinePlayer(UUID).getName()).split("/")) {
                 if (!dat.isEmpty()) {
                     out.add(dat);
                 }
@@ -199,7 +199,7 @@ public class BountyHunter extends SingleNameObject {
         Inventory inv = Bukkit.createInventory(null, 54, "Quests");
         for (int i = 0; i < quests.size(); i++) {
             Quest q = quests.get(i);
-            ItemStack item = Inventories.create("hunter.submit " + username + " " + i,
+            ItemStack item = Inventories.create("hunter.submit " + Bukkit.getOfflinePlayer(UUID).getName() + " " + i,
                     Material.PLAYER_HEAD, q.getItem_name(), ""+q.getCount());
             SkullMeta m = (SkullMeta) item.getItemMeta();
             m.setOwningPlayer(Bukkit.getOfflinePlayer(
