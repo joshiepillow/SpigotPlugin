@@ -1,15 +1,18 @@
 package me.joshiepillow.starwars;
 
 import me.joshiepillow.starwars.classes.Inventories;
+import me.joshiepillow.starwars.classes.Joshierror;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -62,6 +65,28 @@ public class MyListener implements Listener
     	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(event.getPlayer(), "start"), 1L);
     	// and we are done!
     }
+
+    @EventHandler
+    public void onPlayerDeath (PlayerDeathEvent event) throws Joshierror {
+        try {
+            World w = plugin.getServer().getWorld(plugin.getConfig().getString("deathrespawn.world"));
+            double x = plugin.getConfig().getDouble("deathrespawn.x");
+            double y = plugin.getConfig().getDouble("deathrespawn.y");
+            double z = plugin.getConfig().getDouble("deathrespawn.z");
+        }
+        catch(Exception e){
+            plugin.getLogger().severe("Crash report starting. Unloading plugin after");
+            plugin.getLogger().severe("=============================================");
+            plugin.getLogger().severe("Unable to load death respawn location");
+            plugin.getLogger().severe("from config. Maybe corrupt file");
+            plugin.getLogger().severe("[SpigotPlugin]");
+            plugin.getLogger().severe("Contact the devs for help");
+            plugin.getLogger().severe("=============================================");
+            plugin.getLogger().severe("Report ended, unloading plugin");
+            throw new Joshierror("Unable to obtain death location key");
+        }
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -80,12 +105,13 @@ public class MyListener implements Listener
         }
     }
 
-    @EventHandler
+    // done by worldguard
+    /*@EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlockPlaced().getType().equals(Material.PLAYER_HEAD) ||
             event.getBlockPlaced().getType().equals(Material.PLAYER_WALL_HEAD))
             event.setCancelled(true);
-    }
+    }*/
 
     @EventHandler
     public void onVehicleExit(VehicleExitEvent event) {

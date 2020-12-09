@@ -79,6 +79,8 @@ public class Main extends JavaPlugin {
         BountyHunter h;
         Product p;
         switch (command.getName().toLowerCase()) {
+            case "setforcespawn":
+
             /*case "mycommand":
                 sender.sendMessage("You ran /mycommand!");
                 return true;
