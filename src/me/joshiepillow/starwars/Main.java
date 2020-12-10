@@ -48,7 +48,7 @@ public class Main extends JavaPlugin {
             BountyHunter.setAll(d.hunters);
         }
         Bukkit.getLogger().info("Successfully loaded Starwars version" + this.getDescription().getVersion());
-        CustomItem.setItems();
+        CustomItem.setItems(this);
         Recipes.setItems(this);
         Products.setItems();
         Inventories.init(this);

@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -72,6 +73,7 @@ public class MyListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        event.getPlayer().getInventory().addItem(CustomItem.FORCE_ABILITIES_HOLDER);
         // books are :pogchamp:
     	ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
     	List<String> booktext = new ArrayList<String>(){{
@@ -223,4 +225,11 @@ public class MyListener implements Listener
             event.getEntity().getEquipment().setHelmet(helmets[0]);
         }
     }*/
+
+    @EventHandler
+    public void onFallDamageEvent(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL &&
+            CustomItem.ForceLand.contains(event.getEntity().getUniqueId()))
+            event.setCancelled(true);
+    }
 }

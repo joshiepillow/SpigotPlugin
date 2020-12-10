@@ -120,4 +120,4 @@ commands:
   quests:
     description: Open the quest list.
     usage: /<command>
-depend: [LuckPerms]
+depend: [LuckPerms, CustomItems]
