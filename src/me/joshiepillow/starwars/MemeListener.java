@@ -1,4 +1,4 @@
-/*package me.joshiepillow.starwars;
+package me.joshiepillow.starwars;
 
 import me.joshiepillow.starwars.classes.Inventories;
 import org.bukkit.Bukkit;
@@ -82,4 +82,4 @@ public class MemeListener implements Listener
         }
     }
 
-}*/
+}
