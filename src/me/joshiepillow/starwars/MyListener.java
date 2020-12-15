@@ -4,6 +4,7 @@ import me.joshiepillow.starwars.classes.Inventories;
 import me.joshiepillow.starwars.classes.Joshierror;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
@@ -67,12 +68,15 @@ public class MyListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerDeath (PlayerDeathEvent event) throws Joshierror {
+    public void onPlayerDeath (PlayerDeathEvent event) {
         try {
-            World w = plugin.getServer().getWorld(plugin.getConfig().getString("deathrespawn.world"));
-            double x = plugin.getConfig().getDouble("deathrespawn.x");
-            double y = plugin.getConfig().getDouble("deathrespawn.y");
-            double z = plugin.getConfig().getDouble("deathrespawn.z");
+            World w = plugin.getServer().getWorld("hub");
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    event.getEntity().teleport(new Location(w, 10, 66, -9, 270, 0));
+                }
+            }, 1); // lambada rape
         }
         catch(Exception e){
             plugin.getLogger().severe("Crash report starting. Unloading plugin after");
@@ -83,7 +87,9 @@ public class MyListener implements Listener
             plugin.getLogger().severe("Contact the devs for help");
             plugin.getLogger().severe("=============================================");
             plugin.getLogger().severe("Report ended, unloading plugin");
-            throw new Joshierror("Unable to obtain death location key");
+
+            // maybe unsafe
+            Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
 
