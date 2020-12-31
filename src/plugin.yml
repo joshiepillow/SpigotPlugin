@@ -93,6 +93,16 @@ commands:
     usage: /<command> Username Product
     permission: nope
 
+  forcepowers.grant:
+    description: Grant force power
+    usage: /<command> Username number
+    permission: nope
+
+  forcepowers.take:
+    description: Take force power
+    usage: /<command> Username number
+    permission: nope
+
   test:
     description: test
     usage: /<command>
@@ -101,13 +111,10 @@ commands:
   start:
     description: Get started.
     usage: /<command>
-  name:
+  nick:
     description: Rename yourself.
     usage: /<command> name
     permission: INSERT_PERMISSIONS_HERE
-#  create:
-#    description: Create a bounty hunter.
-#    usage: /<command>
   bal:
     description: Get info about yourself.
     usage: /<command>

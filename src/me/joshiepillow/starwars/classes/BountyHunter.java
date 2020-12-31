@@ -23,6 +23,8 @@ public class BountyHunter extends SingleNameObject {
      */
     private int credits;
 
+    private boolean[] isUnlockedForcePowers = {false,false,false,false,false,false,false,false,false};
+
     public ItemStack Lightsaber; //null if none
 
     /**
@@ -131,12 +133,7 @@ public class BountyHunter extends SingleNameObject {
         return null;
     }
 
-    /**
-     * Buy a product
-     * @param p valid product
-     * @return if affordable, command, if unaffordable, null
-     */
-    public List<String> buy(Product p) {
+    /*public List<String> buy(Product p) {
         if (changeBal(-p.getCost())) {
             List<String> out = new ArrayList<>();
             String s = p.getCommand(Bukkit.getOfflinePlayer(UUID).getName());
@@ -149,7 +146,7 @@ public class BountyHunter extends SingleNameObject {
 
         }
         return null;
-    }
+    }*/
 
     public void erase() {
         erase(BountyHunter.class);
@@ -196,7 +193,7 @@ public class BountyHunter extends SingleNameObject {
         return s.toString();
     }
     public Inventory QuestGui() {
-        Inventory inv = Bukkit.createInventory(null, 54, "Quests");
+        /*Inventory inv = Bukkit.createInventory(null, 54, "Quests");
         for (int i = 0; i < quests.size(); i++) {
             Quest q = quests.get(i);
             ItemStack item = Inventories.create("hunter.submit " + Bukkit.getOfflinePlayer(UUID).getName() + " " + i,
@@ -208,6 +205,34 @@ public class BountyHunter extends SingleNameObject {
             inv.setItem(i, item);
         }
         Inventories.fillAll(inv);
-        return inv;
+        return inv;*/
+        return null;
+    }
+    public boolean isUnlockedForcePower(int i) {
+        return (isUnlockedForcePowers[i]);
+    }
+    public boolean unlockForcePower(int i) {
+        if (isUnlockedForcePowers[i]) return false;
+        isUnlockedForcePowers[i] = true;
+        return true;
+    }
+    public int unlockAllForcePowers() {
+        int counter = 0;
+        for (int i = 0; i < isUnlockedForcePowers.length; i++) {
+            if (unlockForcePower(i)) counter++;
+        }
+        return counter;
+    }
+    public boolean lockForcePower(int i) {
+        if (!isUnlockedForcePowers[i]) return false;
+        isUnlockedForcePowers[i] = false;
+        return true;
+    }
+    public int lockAllForcePowers() {
+        int counter = 0;
+        for (int i = 0; i < isUnlockedForcePowers.length; i++) {
+            if (lockForcePower(i)) counter++;
+        }
+        return counter;
     }
 }

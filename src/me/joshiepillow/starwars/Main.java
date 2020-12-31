@@ -51,7 +51,7 @@ public class Main extends JavaPlugin {
         CustomItem.setItems(this);
         Recipes.setItems(this);
         Products.setItems();
-        Inventories.init(this);
+        //Inventories.init(this);
         Shop.setItems();
     }
 
@@ -219,7 +219,7 @@ public class Main extends JavaPlugin {
                 }
                 return false;
             }
-            case "hunter.buy": {
+            /*case "hunter.buy": {
                 if (args.length == 2) {
                     h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
                     p = Product.getByName(args[1]);
@@ -239,7 +239,7 @@ public class Main extends JavaPlugin {
                     return true;
                 }
                 return false;
-            }
+            }*/
             case "hunter.quest": {
                 if (args.length <  4) return false;
                 h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
@@ -409,8 +409,10 @@ public class Main extends JavaPlugin {
             case "test": {
                 Player player = (Player) sender;
                 ItemMeta m = (player).getInventory().getItemInMainHand().getItemMeta();
+                player.getInventory().addItem(CustomItem.GAMMOREAN_AXE);
+                player.getInventory().addItem((CustomItem.GADERFFII));
                 if (m != null && m.getDisplayName().equals("Pig Head"))
-                    player.openInventory(Shop.MAIN.getInventory());
+                    player.openInventory(Shop.MAIN.get());
                 else {
                     if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.getInventory().setItemInMainHand(new ItemStack(Material.CARROT_ON_A_STICK));
@@ -435,7 +437,7 @@ public class Main extends JavaPlugin {
                 return true;
             }
             case "shop.open": {
-                if (args.length != 2) return false;
+                /*if (args.length != 2) return false;
                 else {
                     Player player = server.getPlayer(args[0]);
                     Inventories inv = Inventories.getByName(args[1]);
@@ -446,7 +448,9 @@ public class Main extends JavaPlugin {
                         sender.sendMessage("Success!");
                     }
                     return true;
-                }
+                }*/
+                sender.sendMessage("This feature is disabled.");
+                return false;
             }
             case "shop.close": {
                 if (args.length != 1) return false;
@@ -460,7 +464,7 @@ public class Main extends JavaPlugin {
                     return true;
                 }
             }
-            case "shop.buy": {
+            /*case "shop.buy": {
                 if (args.length != 2) return false;
                 else {
                     h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
@@ -479,20 +483,67 @@ public class Main extends JavaPlugin {
                     } else sender.sendMessage("BountyHunter or Product does not exist.");
                 }
                 return true;
-            }
+            }*/
+            case "forcepowers.grant": {
+                if (args.length != 2) return false;
+                if (args[1].equals("*")) {
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
+                    if (h != null) {
+                        sender.sendMessage(h.unlockAllForcePowers()+" power(s) unlocked.");
+                    } else sender.sendMessage("BountyHunter does not exist.");
+                    return true;
+                }
+                int x;
+                try {
+                    x = Integer.parseInt(args[1]);
+                } catch (Exception e) {
+                    sender.sendMessage("Second argument must be int.");
+                    return true;
+                }
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
+                if (h != null) {
+                    if (h.unlockForcePower(x)) sender.sendMessage("Success!");
+                    else sender.sendMessage("Already Unlocked");
 
-            case "start":
+                } else sender.sendMessage("BountyHunter does not exist.");
+                return true;
+            }
+            case "forcepowers.take": {
+                if (args.length != 2) return false;
+                if (args[1].equals("*")) {
+                    h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
+                    if (h != null) {
+                        sender.sendMessage(h.lockAllForcePowers()+" power(s) locked.");
+                    } else sender.sendMessage("BountyHunter does not exist.");
+                    return true;
+                }
+                int x;
+                try {
+                    x = Integer.parseInt(args[1]);
+                } catch (Exception e) {
+                    sender.sendMessage("Second argument must be int.");
+                    return true;
+                }
+                h = BountyHunter.getByUUID(Bukkit.getPlayer(args[0]).getUniqueId());
+                if (h != null) {
+                    if (h.lockForcePower(x)) sender.sendMessage("Success!");
+                    else sender.sendMessage("Already Unlocked");
+
+                } else sender.sendMessage("BountyHunter does not exist.");
+                return true;
+            }
+            case "start": {
                 sender.sendMessage("§8Hey, " + sender.getName() + ". Welcome to §r§e§lGalaxiesHorizon!\n" +
                         "§r§8GalaxiesHorizon is a Star Wars themed multiplayer map with custom weapons, quests, guns and more!\n" +
                         " \n" +
-                        "§r§eTo get started type /name <your nickname>\n" +
                         "List of commands:\n" +
                         "     /nick <nick>  -- name yourself\n" +
                         "     /shop         -- open shop\n" +
                         "     /me           -- lists your info\n" +
                         "     /start        -- show this message again.");
                 return true;
-            case "nick":
+            }
+            case "nick": {
                 if (sender instanceof Player) {
                     if (args.length < 1) sender.sendMessage("Please choose a name.");
                     else if (args.length > 1) sender.sendMessage("Name must be one word.");
@@ -507,21 +558,24 @@ public class Main extends JavaPlugin {
                     return false;
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
-            case "shop":
+            }
+            case "shop": {
                 if (sender instanceof Player) {
                     if (BountyHunter.getByUUID(Bukkit.getPlayer(sender.getName()).getUniqueId()) == null)
                         sender.sendMessage("You need to choose a name first!");
-                    else ((Player) sender).openInventory(Shop.MAIN.getInventory());
+                    else ((Player) sender).openInventory(Shop.MAIN.get());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
-            case "me":
+            }
+            case "me": {
                 if (sender instanceof Player) {
                     h = BountyHunter.getByUUID(Bukkit.getPlayer(sender.getName()).getUniqueId());
-                    if (h==null) sender.sendMessage("You need to choose a name first!");
+                    if (h == null) sender.sendMessage("You need to choose a name first!");
                     else sender.sendMessage(h.toString());
                 } else sender.sendMessage("This command can only be run by a player.");
                 return true;
-            case "list":
+            }
+            case "list": {
                 StringBuilder s = new StringBuilder();
                 for (int i = 0; i < BountyHunter.getAll().size(); i++) {
                     h = BountyHunter.getAll().get(i);
@@ -530,6 +584,7 @@ public class Main extends JavaPlugin {
                 }
                 sender.sendMessage(s.toString());
                 return true;
+            }
 
             default:
                 sender.sendMessage("This shouldn't be possible...Must be a bug.");
