@@ -1,6 +1,5 @@
 package me.joshiepillow.starwars;
 
-import me.joshiepillow.starwars.classes.BountyHunter;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -14,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Data implements Serializable {
+    /*
     private static transient final long serialVersionUID = -1681012206529286330L;
 
     public boolean saveData(String filePath) {
@@ -58,5 +58,7 @@ public class Data implements Serializable {
         else
             this.hunters = new ArrayList<>();
     }
+
+     */
 
 }

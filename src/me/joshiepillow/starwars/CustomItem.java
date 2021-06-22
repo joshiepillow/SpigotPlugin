@@ -1,4 +1,4 @@
-package me.joshiepillow.starwars.classes;
+package me.joshiepillow.starwars;
 
 import me.joshiepillow.CustomItems.CustomItems;
 import org.bukkit.*;
@@ -6,16 +6,15 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -41,6 +40,8 @@ public class CustomItem {
 
     //Force stuffs
     public static ItemStack FORCE_ABILITIES_HOLDER;
+
+    public static HashMap<UUID, ArrayList<Boolean>> invs;
 
     //Custom Melee Weapons
     public static ItemStack GADERFFII;
@@ -104,20 +105,29 @@ public class CustomItem {
         simpleCustomItem = new CustomItems();
         fillAll(simpleCustomItem);
     }
+    public static ArrayList<String> forcePowerList = new ArrayList<String>(){{
+        add("Push");
+        add("Pull");
+        add("Jump");
+        add("Speed");
+        add("Land");
+        add("Choke");
+        add("Absorption");
+        add("Strength");
+        add("Lightning");
+    }};
     public static List<UUID> ForceLand = new ArrayList<>();
     private static void setForceAbilitiesHolder() {
-
         FORCE_ABILITIES_HOLDER = new ItemStack(Material.GRAY_STAINED_GLASS);
         ItemMeta meta = FORCE_ABILITIES_HOLDER.getItemMeta();
         meta.setDisplayName("§5Force Abilities");
         meta.setLore(new ArrayList<String>(){{add("§6Click anywhere to use.");}});
         FORCE_ABILITIES_HOLDER.setItemMeta(meta);
         CustomItems customItems = new CustomItems();
-        HashMap<UUID, Inventory> player_invs = new HashMap<>();
-        List<ItemStack> storage = Arrays.asList(new ItemStack[9]);
+        HashMap<String, ItemStack> storage = new HashMap<>();
 
         //define a custom function which will help later
-        int cool_down = 200; //cooldown time
+        int cool_down = 20; //cooldown time
 
         CustomItems locked = new CustomItems();
         locked.onInventoryClickEvent = (event2) -> { //prevent player from taking item
@@ -130,78 +140,93 @@ public class CustomItem {
         lockedItem.setItemMeta(meta);
 
         Consumer<InventoryClickEvent> r = (event) -> {
-            Consumer<PlayerInteractEvent> old_interact = customItems.onPlayerInteractEvent;
-            AtomicInteger counter = new AtomicInteger();
-            customItems.onPlayerInteractEvent = (event1) -> {
-                event1.getPlayer().sendMessage("§4" + (cool_down / 20 - counter.get()) + " second(s) left");
-                event1.setCancelled(true);
-            };
-            int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-                /*
-                ItemMeta m = FORCE_ABILITIES_HOLDER.getItemMeta();
-                m.setDisplayName("§4" + (cool_down / 20 - counter.get()) + " second(s) left");
-                FORCE_ABILITIES_HOLDER.setItemMeta(m);
-                */
-                counter.getAndIncrement();
-            }, 0, 20);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()->{
-                /*
-                ItemMeta m = FORCE_ABILITIES_HOLDER.getItemMeta();
-                m.setDisplayName("§5Force Abilities");
-                FORCE_ABILITIES_HOLDER.setItemMeta(m);
-                Bukkit.getScheduler().cancelTask(id);
-                 */
-                customItems.onPlayerInteractEvent = old_interact;
-            }, cool_down);
+            IndividualPlayerData ipd = JavaPlugin.getPlugin(Main.class).getPlayerData().getDataByUUID(event.getWhoClicked().getUniqueId());
+            ipd.setCooldowns(cool_down);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    int i = ipd.getCooldowns();
+                    if (Bukkit.getServer().getPlayerExact(event.getWhoClicked().getName()) == null) return;
+                    if (i <= 1) {
+                        ItemMeta m = FORCE_ABILITIES_HOLDER.getItemMeta();
+                        m.setDisplayName("§5Force Abilities");
+                        FORCE_ABILITIES_HOLDER.setItemMeta(m);
+                        ipd.setCooldowns(0);
+                        cancel();
+                    }
+                    ItemMeta m = FORCE_ABILITIES_HOLDER.getItemMeta();
+                    m.setDisplayName("§4" + (i - 1) + " second(s) left");
+                    FORCE_ABILITIES_HOLDER.setItemMeta(m);
+                    ipd.setCooldowns(i - 1);
+                }
+            }.runTaskTimer(JavaPlugin.getPlugin(Main.class), 20, 20);
         };
 
         //FORCE PUSH - This is literally useless
         int push_radius = 8; //adjustable
         double push_power = 0.5; //adjustable
         int delay_between_pushes = 5; //adjustable
-        storage.set(0, setForcePush(r, push_radius, push_power, delay_between_pushes));
+        storage.put(forcePowerList.get(0), setForcePush(r, push_radius, push_power, delay_between_pushes));
 
         //FORCE PULL - Also pretty useless
         int pull_radius = push_radius; //adjustable
         double pull_power = push_power; //adjustable
         int delay_between_pulls = delay_between_pushes; //adjustable
-        storage.set(1, setForcePull(r, pull_radius, pull_power, delay_between_pulls));
+        storage.put(forcePowerList.get(1), setForcePull(r, pull_radius, pull_power, delay_between_pulls));
 
         //FORCE JUMP - Now you can go out of bounds yay!
-        storage.set(2, setForceJump(r));
+        storage.put(forcePowerList.get(2), setForceJump(r));
 
         //FORCE SPEED - We would like you to perform a drug test.
-        storage.set(3, setForceSpeed(r));
+        storage.put(forcePowerList.get(3), setForceSpeed(r));
 
         //FORCE LAND - Feather falling 1000000000000
-        storage.set(4, setForceLand(r));
+        storage.put(forcePowerList.get(4), setForceLand(r));
 
         //FORCE CHOKE - Cough cough covid
         int choke_distance = pull_radius; //adjustable
         double choke_power = 0.3; //adjustable
         int delay_between_chokes = 1; //adjustable
-        storage.set(5, setForceChoke(r, choke_distance, choke_power, delay_between_chokes));
+        storage.put(forcePowerList.get(5), setForceChoke(r, choke_distance, choke_power, delay_between_chokes));
 
         //FORCE ABSORPTION - Pretty OP ngl
-        storage.set(6, setForceAbsorption(r));
+        storage.put(forcePowerList.get(6), setForceAbsorption(r));
 
         //FORCE STRENGTH - You have equipped the Key of Reason
-        storage.set(7, setForceStrength(r));
+        storage.put(forcePowerList.get(7), setForceStrength(r));
 
         //FORCE LIGHTNING - Lightning always strikes twice
         int lightning_distance = 8; //adjustable
         int delay_between_strikes = 26; //adjustable
-        storage.set(8, setForceLightning(r, lightning_distance, delay_between_strikes));
+        storage.put(forcePowerList.get(8), setForceLightning(r, lightning_distance, delay_between_strikes));
 
         customItems.onPlayerInteractEvent = event -> {
             if (event.getPlayer().getOpenInventory().getType() == InventoryType.CRAFTING ||
                     event.getPlayer().getOpenInventory().getType() == InventoryType.CREATIVE) { //fix weird interaction with shop
-                if (!player_invs.containsKey(event.getPlayer().getUniqueId())) {
+                IndividualPlayerData ipd = JavaPlugin.getPlugin(Main.class).getPlayerData().getDataByUUID(event.getPlayer().getUniqueId());
+                if (ipd.getCooldowns() > 0){
+                    event.getPlayer().sendMessage("§4" + ipd.getCooldowns() + " second(s) left");
+                    event.setCancelled(true);
+                    return;
+                }
+                Inventory inv = Bukkit.createInventory(null, 9, "§5Force Abilities");
+                for (int i = 0; i < forcePowerList.size(); i++) {
+                    String s = forcePowerList.get(i);
+                    if (ipd.getUnlockedForcePowers(s)) {
+                        inv.setItem(i, storage.get(s));
+                    }
+                    else {
+                        inv.setItem(i, lockedItem);
+                    }
+                    event.getPlayer().openInventory(inv);
+                    event.setCancelled(true);
+                }
+                /*if (ipd.getForcePowers() == null) {
                     Inventory inv = Bukkit.createInventory(null, 9, "§5Force Abilities");
-                    BountyHunter h = BountyHunter.getByUUID(event.getPlayer().getUniqueId());
-                    if (h != null)
+                    ArrayList<Boolean> li = invs.get(event.getPlayer().getUniqueId());
+                    if (li != null)
                         for (int i = 0; i < inv.getSize(); i++) {
-                            if (h.isUnlockedForcePower(i)) inv.setItem(i, storage.get(i));
+                            if (li.get(i)) inv.setItem(i, storage.get(i));
                             else inv.setItem(i, lockedItem);
                         }
                     else
@@ -211,11 +236,11 @@ public class CustomItem {
                     player_invs.put(event.getPlayer().getUniqueId(), inv);
                 } else {
                     Inventory inv = player_invs.get(event.getPlayer().getUniqueId());
-                    BountyHunter h = BountyHunter.getByUUID(event.getPlayer().getUniqueId());
-                    if (h != null)
+                    ArrayList<Boolean> li = invs.get(event.getPlayer().getUniqueId());
+                    if (li != null)
                         for (int i = 0; i < inv.getSize(); i++) {
                             if (inv.getItem(i).getType() != Material.RED_STAINED_GLASS_PANE) {
-                                if (h.isUnlockedForcePower(i)) inv.setItem(i, storage.get(i));
+                                if (li.get(i)) inv.setItem(i, storage.get(i));
                                 else inv.setItem(i, lockedItem);
                             }
                         }
@@ -223,10 +248,11 @@ public class CustomItem {
                         for (int i = 0; i < inv.getSize(); i++) inv.setItem(i, lockedItem);
                     event.getPlayer().openInventory(inv);
                     event.setCancelled(true);
-                }
+                }*/
             }
         };
         fillAll(customItems);
+        customItems.onPlayerDropItemEvent = event -> {};
         customItems.setPersistentData(FORCE_ABILITIES_HOLDER);
     }
     private static void makeParticleCircle(Location loc, Color color) {

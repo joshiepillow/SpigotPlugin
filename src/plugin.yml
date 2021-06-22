@@ -5,94 +5,6 @@ author: me
 description: An Example plugin
 api-version: 1.16
 commands:
-#  mycommand:
-#    description: An example command
-#    usage: /mycommand
-#    permission: myplugin.mycommand
-#    permission-message: You don't have the myplugin.mycommand permission.
-#  players_at:
-#    description: Check the number of players in a location
-#    usage: /<command> [X-coord 1] [Y-coord 1] [X-coord 2] [Y-coord 2]
-#  who_at:
-#    description: Name of players in a world
-#    usage: /<command>
-#  summon_boss:
-#    description: What do you think
-#    usage: It's not that hard
-  hunter.create:
-    description: Create new hunter
-    usage: /<command> Nickname [username]
-    permission: nope
-  hunter.name:
-    description: Get/Set name
-    usage: /<command> Username [Nickname]
-    permission: nope
-  hunter.bal:
-    description: Get/Change balance
-    usage: /<command> Username [change]
-    permission: nope
-  hunter.list:
-    description: List all hunters
-    usage: /<command>
-    permission: nope
-  hunter.buy:
-    description: Buy a product
-    usage: /<command> Username Product
-    permission: nope
-  hunter.quest:
-    description: Create new quest
-    usage: /<command> Username displayName cost command
-  hunter.submit:
-    description: Submit Quests. If [Quest_Num] is missing, attempt to submit every Quest.
-    usage: /<command> Username [Quest_Num]
-    permission: nope
-  hunter.quests:
-    description: Show all quests
-    usage: /<command> Username
-    permission: nope
-  hunter.erase:
-    description: Erase a hunter
-    usage: /<command> Username
-    permission: nope
-
-#  product.create:
-#    description: Create new product
-#    usage: /<command> name cost command
-#    permission: nope
-#  product.cmd:
-#    description: Get/Set command
-#    usage: /<command> name [newCmd]
-#    permission: nope
-#  product.name:
-#    description: Get/Set name
-#    usage: /<command> name [newName]
-#    permission: nope
-#  product.cost:
-#    description: Get/Set cost
-#    usage: /<command> name [newName]
-#    permission: nope
-#  product.list:
-#    description: List all products
-#    usage: /<command>
-#    permission: nope
-#  product.erase:
-#    description: Erase a product
-#    usage: /<command> name
-#    permission: nope
-
-  shop.open:
-    description: Opens a shop page
-    usage: /<command> Username page
-    permission: nope
-  shop.close:
-    description: Closes a shop
-    usage: /<command> Username
-    permission: nope
-  shop.buy:
-    description: Safe buy
-    usage: /<command> Username Product
-    permission: nope
-
   forcepowers.grant:
     description: Grant force power
     usage: /<command> Username number
@@ -103,28 +15,12 @@ commands:
     usage: /<command> Username number
     permission: nope
 
-  test:
-    description: test
+  forcepowers.item:
+    description: Give forcepower ui block
     usage: /<command>
-    permission: nope
 
-  start:
-    description: Get started.
-    usage: /<command>
-  nick:
-    description: Rename yourself.
-    usage: /<command> name
-    permission: INSERT_PERMISSIONS_HERE
-  bal:
-    description: Get info about yourself.
-    usage: /<command>
-  list:
-    description: List online players
-    usage: /<command>
-  shop:
-    description: Opens the shop.
-    usage: /<command>
-  quests:
-    description: Open the quest list.
-    usage: /<command>
+  forcepowers.save:
+    description: Save data
+      usage: /<command>
+      permission: nope
 depend: [LuckPerms, CustomItems]

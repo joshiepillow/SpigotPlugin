@@ -1,4 +1,4 @@
-package me.joshiepillow.starwars.classes;
+/*package me.joshiepillow.starwars;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -31,4 +31,4 @@ public class Force {
             player.openInventory(inv);
         }
     }
-}
+}*/
